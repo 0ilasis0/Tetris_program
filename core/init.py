@@ -1,7 +1,6 @@
 import pprint
 
 import pygame
-
 from core.base import Stack
 from core.font.build import build_json
 from core.font.json_manager import json_mg
@@ -36,10 +35,10 @@ page_maps = {page: getattr(page_navigation, page.name) for page in PageTable}
 pygame.init()
 
 ''' screen '''
-screen_mg.set()
+screen_mg.setup()
 
 ''' keyboard '''
-keyboard_mg.set(
+keyboard_mg.setup(
     current_keyboard = PageTable.MENU,
     player1 = player1,
     player2 = player2,
@@ -53,7 +52,7 @@ for page in PageTable:
         fcn = getattr(page_boot, page.name)
         page_mg.register_init_fcn(page, fcn)
 
-page_mg.set(
+page_mg.setup(
     stack = Stack(PageTable.MENU, genealogy_table),
     keymaps = page_maps,
     page_map = tree_path_table[PageTable.MENU].family_table,
@@ -62,7 +61,7 @@ page_mg.set(
 
 ''' song '''
 pygame.mixer.init()
-song_mg.set()
+song_mg.setup()
 
 
 

@@ -2,8 +2,8 @@ from dataclasses import dataclass, field
 
 from core.debug import dbg
 from core.location_layout.base import layout_config
-from core.location_layout.variable import Position, Size
 
+from core.variable import Position, Size
 
 @dataclass
 class LayoutItem:

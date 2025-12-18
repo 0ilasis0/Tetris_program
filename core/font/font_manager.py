@@ -1,8 +1,7 @@
 import pygame
-
 from core.debug import dbg
-from core.location_layout.variable import BaseParameter, Position
-from core.variable import PathConfig
+from core.location_layout.variable import BaseParameter
+from core.variable import PathConfig, Position
 
 
 class FontsManager:

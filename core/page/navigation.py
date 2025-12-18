@@ -37,11 +37,11 @@ class BasePageNavigation(ToolPageNavigation):
         self.draw_mg = draw_mg
         self.fonts_mg = fonts_mg
 
-        self.set()
+        self.setup()
 
         super().__init__(keyboard_mg, draw_mg, fonts_mg)
 
-    def set(self):
+    def setup(self):
 
         navigation_base = NavigationList(self)
         navigation_grid = NavigationSingleMenu(self, player1)
@@ -118,9 +118,9 @@ class NavigationSingleMenu:
         self.player = player
 
         self.grid_mg = GridManager(GridParameter.SINGLE_MENU_LEVEL_ROW, GridParameter.SINGLE_MENU_LEVEL_COLS)
-        self.set()
+        self.setup()
 
-    def set(self):
+    def setup(self):
         for y in range(GridParameter.SINGLE_MENU_LEVEL_ROW):
             for x in range(GridParameter.SINGLE_MENU_LEVEL_COLS):
                 self.grid_mg.set_cell(x, y, **{GridThing.LOCK_SWITCH_: GridThing.UNLOCK})

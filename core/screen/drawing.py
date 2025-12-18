@@ -1,6 +1,5 @@
 import pygame
-
-from core.location_layout.variable import Position, Size
+from core.variable import Position, Size
 
 
 class DrawManager():

@@ -1,10 +1,9 @@
 from pathlib import Path
 
 import pygame
-
-from core.location_layout.variable import LayoutName, Size
+from core.location_layout.variable import LayoutName
 from core.screen.variable import ScreenConfig
-from core.variable import PageTable, PathBase, PathConfig
+from core.variable import PageTable, PathBase, PathConfig, Size
 
 
 class ScreenManager:
@@ -22,7 +21,7 @@ class ScreenManager:
         self.page_images: dict[PageTable, dict[str, dict]] = {page: {} for page in PageTable}
 
     # ========= 視窗設定 =========
-    def set(self):
+    def setup(self):
         self.window = pygame.display.set_mode((ScreenConfig.width, ScreenConfig.height))
         pygame.display.set_caption(ScreenConfig.title_name)
 

@@ -8,7 +8,7 @@ class PageManager:
         self.current_boot = None
         self.callbacks = {}
 
-    def set (self, stack, keymaps, page_map, current_page):
+    def setup (self, stack, keymaps, page_map, current_page):
         self.history_stack = stack
 
         self.page_map       = page_map

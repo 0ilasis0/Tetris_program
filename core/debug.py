@@ -9,10 +9,10 @@ import os
 
 
 class Debug:
-    def __init__(self, enable=True):
+    def __init__(self, enable = True):
         self.enable = enable   # 可以隨時關閉/開啟 debug 輸出
 
-    def _get_frameinfo(self, frame=None):
+    def _get_frameinfo(self, frame = None):
         """取得呼叫來源資訊"""
         if frame is None:
             frame = inspect.currentframe().f_back
@@ -20,7 +20,7 @@ class Debug:
         filename = os.path.basename(info.filename)  # 只取檔名
         return info, filename
 
-    def log(self, *args, caller_frame=None):
+    def log(self, *args, caller_frame = None):
         """一般 debug 訊息 (綠色)"""
         if not self.enable:
             return

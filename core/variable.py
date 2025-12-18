@@ -1,6 +1,22 @@
 import sys
+from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+
+
+@dataclass(frozen = True)
+class Size:
+    width: int
+    height: int
+
+@dataclass(frozen = True)
+class Position:
+    x: int
+    y: int
+
+    @classmethod
+    def zero(cls):
+        return cls(0,0)
 
 #
 # 路徑

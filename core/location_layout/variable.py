@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from enum import Enum
 
 from core.screen.variable import ScreenConfig
@@ -13,22 +12,6 @@ class BaseParameter:
     y_gap           = round(word * 1.5)
     y_gap_mini      = round(word_mini * 1.5)
     y_gap_big       = round(word_big * 1.5)
-
-
-
-@dataclass
-class Size:
-    width: int
-    height: int
-
-@dataclass
-class Position:
-    x: int
-    y: int
-
-    @classmethod
-    def zero(cls):
-        return cls(0,0)
 
 
 

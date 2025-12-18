@@ -1,7 +1,7 @@
 import random
 
-from core.location_layout.variable import Position, Size
 from core.tetris_game.variable import GameVariable, figures
+from core.variable import Position, Size
 
 
 class Tetromino:

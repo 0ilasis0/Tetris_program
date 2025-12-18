@@ -35,7 +35,7 @@ class SongManager(BaseManager):
             self.play_current_song()
             return
 
-    def set(self):
+    def setup(self):
         default_state: dict[str, any] = self.build_default_state(JsonPath.SONG.value)
         json_map: dict[str, tuple[str, str]] = self.build_json_map(JsonPath.SONG.value)
         super().__init__(default_state = default_state, json_map = json_map)

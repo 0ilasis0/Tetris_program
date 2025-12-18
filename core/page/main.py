@@ -7,7 +7,7 @@ from core.hmi.variable import SongVariable
 from core.keyboard.base import keyboard_mg
 from core.location_layout.base import layout_config
 from core.location_layout.main import layout_mg
-from core.location_layout.variable import LayoutName, Position, Size
+from core.location_layout.variable import LayoutName
 from core.page.base import page_mg
 from core.page.navigation import BasePageNavigation
 from core.page.tree_path import tree_path_table
@@ -18,7 +18,8 @@ from core.tetris_game.main import (TetrisCore, game_clock, individual_tetris,
                                    main_tetris_game)
 from core.tetris_game.manager import player1, player2
 from core.tetris_game.variable import BaseVariable, GameVariable, RankVariable
-from core.variable import JsonPath, PageTable, PathConfig, colors
+from core.variable import (JsonPath, PageTable, PathConfig, Position, Size,
+                           colors)
 
 
 def main_page():

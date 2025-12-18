@@ -1,11 +1,11 @@
 from core.hmi.song import SongVariable
 from core.location_layout.base import layout_config
 from core.location_layout.manager import LayoutItem, LayoutManager
-from core.location_layout.variable import LayoutName, Position, Size
+from core.location_layout.variable import LayoutName
 from core.screen.base import screen_mg
 from core.screen.variable import ScreenConfig
 from core.tetris_game.variable import GameVariable
-from core.variable import PageTable, PathConfig
+from core.variable import PageTable, PathConfig, Position, Size
 
 layout_mg = LayoutManager(ScreenConfig.width, ScreenConfig.height)
 

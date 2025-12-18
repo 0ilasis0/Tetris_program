@@ -1,5 +1,4 @@
 import pygame
-
 from core.variable import PageTable
 
 
@@ -95,7 +94,7 @@ class KeyboardManager:
         self.back_enable        = False
         self.current_keyboard   = None
 
-    def set(self, current_keyboard, player1, player2):
+    def setup(self, current_keyboard, player1, player2):
         self.current_keyboard   = current_keyboard
 
         menu = KeyboardList(
