@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from core.debug import dbg
-from core.font.json_manager import json_mg
+from core.json.manager import json_mg
 from core.keyboard.base import keyboard_mg
 from core.variable import PageTable, PathConfig
 

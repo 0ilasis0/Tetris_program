@@ -1,6 +1,6 @@
 from core.debug import dbg
-from core.font.json_manager import json_mg
 from core.font.variable import RenderingWord
+from core.json.manager import json_mg
 from core.location_layout.variable import BaseParameter
 from core.variable import PageTable, Size
 

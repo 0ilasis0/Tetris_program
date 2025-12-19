@@ -1,5 +1,5 @@
-from core.font.json_manager import json_mg
 from core.hmi.list import BaseManager
+from core.json.manager import json_mg
 from core.variable import PageTable, PathConfig
 
 

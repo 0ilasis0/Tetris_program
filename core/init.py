@@ -2,8 +2,8 @@ import pprint
 
 import pygame
 from core.base import Stack
-from core.font.build import build_json
-from core.font.json_manager import json_mg
+from core.json.build import build_json
+from core.json.manager import json_mg
 from core.font.rendering import rendering
 from core.hmi.song import song_mg
 from core.keyboard.base import keyboard_mg

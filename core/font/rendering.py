@@ -1,7 +1,7 @@
 from core.font.font_manager import fonts_mg
-from core.font.json_manager import json_mg
 from core.font.variable import RenderingWord
 from core.hmi.song import song_mg
+from core.json.manager import json_mg
 from core.location_layout.variable import BaseParameter
 from core.tetris_game.variable import GameVariable, RankVariable
 from core.variable import PageTable, PathConfig, colors
