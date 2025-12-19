@@ -19,6 +19,16 @@ class LayoutName(str, Enum):
     # BASE
     BASE_NUMBER_BIG     = 'base_number_big'
 
+    # BACKGROUND
+    MENU_BG             = 'menu_bg'
+    SINGLE_BG           = 'single_bg'
+    SINGLE_MENU_BG      = 'single_menu_bg'
+    DOUBLE_BG           = 'double_bg'
+    ENDLESS_BG          = 'endless_bg'
+    SONG_BG             = 'song_bg'
+    HELP_BG             = 'help_bg'
+    RANK_BG             = 'rank_bg'
+
     # MENU
     MENU_MAIN           = 'menu_main'
     MENU_RECT           = 'menu_rect'

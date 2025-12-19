@@ -2,18 +2,22 @@ from core.hmi.song import SongVariable
 from core.location_layout.base import layout_config
 from core.location_layout.manager import LayoutItem, LayoutManager
 from core.location_layout.variable import LayoutName
-from core.screen.base import screen_mg
 from core.screen.variable import ScreenConfig
 from core.tetris_game.variable import GameVariable
-from core.variable import PageTable, PathConfig, Position, Size
+from core.variable import PageTable, Position, Size
 
 layout_mg = LayoutManager(ScreenConfig.width, ScreenConfig.height)
 
 
-# 建立虛擬 Pos Size 的物件
 class LayoutCollection:
     def __init__(self) -> None:
         # MENU
+        self.menu_bg = LayoutItem(
+            category = PageTable.MENU,
+            name = LayoutName.MENU_BG,
+            size = Size(ScreenConfig.width, ScreenConfig.height),
+            pos = Position(0, 0),
+        )
         self.menu_main = LayoutItem(
             category = PageTable.MENU,
             name = LayoutName.MENU_MAIN,
@@ -26,6 +30,12 @@ class LayoutCollection:
         )
 
         # SINGLE_MENU
+        self.single_menu_bg = LayoutItem(
+            category = PageTable.SINGLE_MENU,
+            name = LayoutName.SINGLE_MENU_BG,
+            size = Size(ScreenConfig.width, ScreenConfig.height),
+            pos = Position(0, 0),
+        )
         self.single_menu_main = LayoutItem(
             category = PageTable.SINGLE_MENU,
             name = LayoutName.SINGLE_MENU_MAIN,
@@ -45,6 +55,12 @@ class LayoutCollection:
         )
 
         # SINGLE
+        self.single_bg = LayoutItem(
+            category = PageTable.SINGLE,
+            name = LayoutName.SINGLE_BG,
+            size = Size(ScreenConfig.width, ScreenConfig.height),
+            pos = Position(0, 0),
+        )
         self.single_main = LayoutItem(
             category = PageTable.SINGLE,
             name = LayoutName.game_suffix_key(LayoutName.GAME_MAIN, 0),
@@ -80,7 +96,7 @@ class LayoutCollection:
         self.single_clock = LayoutItem(
             category = PageTable.SINGLE,
             name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0),
-            size = screen_mg.get_image_size(PathConfig.img_clock)
+            size = Size(ScreenConfig.width // 8.25, ScreenConfig.height // 5),
         )
         self.single_clock_min = LayoutItem(
             category = PageTable.SINGLE,
@@ -99,10 +115,16 @@ class LayoutCollection:
         )
 
         # DOUBLE
+        self.double_bg = LayoutItem(
+            category = PageTable.DOUBLE,
+            name = LayoutName.DOUBLE_BG,
+            size = Size(ScreenConfig.width, ScreenConfig.height),
+            pos = Position(0, 0),
+        )
         self.double_clock = LayoutItem(
             category = PageTable.DOUBLE,
             name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0),
-            size = screen_mg.get_image_size(PathConfig.img_clock)
+            size = Size(ScreenConfig.width // 8.25, ScreenConfig.height // 5),
         )
         self.double_clock_min = LayoutItem(
             category = PageTable.DOUBLE,
@@ -193,6 +215,12 @@ class LayoutCollection:
         )
 
         # ENDLESS
+        self.endless_bg = LayoutItem(
+            category = PageTable.ENDLESS,
+            name = LayoutName.ENDLESS_BG,
+            size = Size(ScreenConfig.width, ScreenConfig.height),
+            pos = Position(0, 0),
+        )
         self.endless_main = LayoutItem(
             category = PageTable.ENDLESS,
             name = LayoutName.game_suffix_key(LayoutName.GAME_MAIN, 0),
@@ -229,7 +257,7 @@ class LayoutCollection:
         self.endless_clock = LayoutItem(
             category = PageTable.ENDLESS,
             name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0),
-            size = screen_mg.get_image_size(PathConfig.img_clock)
+            size = Size(ScreenConfig.width // 8.25, ScreenConfig.height // 5)
         )
         self.endless_clock_min = LayoutItem(
             category = PageTable.ENDLESS,
@@ -248,6 +276,12 @@ class LayoutCollection:
         )
 
         # SONG
+        self.song_bg = LayoutItem(
+            category = PageTable.SONG,
+            name = LayoutName.SONG_BG,
+            size = Size(ScreenConfig.width, ScreenConfig.height),
+            pos = Position(0, 0),
+        )
         self.song_main = LayoutItem(
             category = PageTable.SONG,
             name = LayoutName.SONG_MAIN,
@@ -273,15 +307,21 @@ class LayoutCollection:
         )
 
         # HELP
+        self.help_bg = LayoutItem(
+            category = PageTable.HELP,
+            name = LayoutName.HELP_BG,
+            size = Size(ScreenConfig.width, ScreenConfig.height),
+            pos = Position(0, 0),
+        )
         self.help_panel = LayoutItem(
             category = PageTable.HELP,
             name = LayoutName.HELP_PANEL,
-            size = screen_mg.get_image_size(PathConfig.img_panel[0]),
+            size = Size(ScreenConfig.width // 1.359, ScreenConfig.height // 8)
         )
         self.help_lace = LayoutItem(
             category = PageTable.HELP,
             name = LayoutName.HELP_LACE,
-            size = screen_mg.get_image_size(PathConfig.img_lace),
+            size = Size(ScreenConfig.width // 1.667, ScreenConfig.height // 1.708),
         )
         self.help_option_title_sl = LayoutItem(
             category = PageTable.HELP,
@@ -315,15 +355,21 @@ class LayoutCollection:
         )
 
         # RANK
+        self.rank_bg = LayoutItem(
+            category = PageTable.RANK,
+            name = LayoutName.RANK_BG,
+            size = Size(ScreenConfig.width, ScreenConfig.height),
+            pos = Position(0, 0),
+        )
         self.rank_underline = LayoutItem(
             category = PageTable.RANK,
             name = LayoutName.RANK_UNDERLINE,
-            size = screen_mg.get_image_size(PathConfig.img_ranking),
+            size = Size(ScreenConfig.width // 1.335, ScreenConfig.height // 1.747),
         )
         self.rank_frame = LayoutItem(
             category = PageTable.RANK,
             name = LayoutName.RANK_FRAME,
-            size = screen_mg.get_image_size(PathConfig.img_frame),
+            size = Size(ScreenConfig.width // 1.327, ScreenConfig.height // 1.3432),
         )
         self.rank_ranking = LayoutItem(
             category = PageTable.RANK,
@@ -351,6 +397,7 @@ layout_collection = LayoutCollection()
 
 
 # MENU
+layout_collection.menu_bg = layout_mg.add_item(layout_collection.menu_bg)
 layout_collection.menu_main = layout_mg.add_center(layout_collection.menu_main)
 layout_collection.menu_rect = layout_mg.add_inner(
     item    = layout_collection.menu_rect,
@@ -360,6 +407,7 @@ layout_collection.menu_rect = layout_mg.add_inner(
 )
 
 # SINGLE_MENU
+layout_collection.single_menu_bg = layout_mg.add_item(layout_collection.single_menu_bg)
 layout_collection.single_menu_main = layout_mg.add_center(layout_collection.single_menu_main)
 layout_collection.single_menu_rect = layout_mg.add_inner(
     item    = layout_collection.single_menu_rect,
@@ -374,6 +422,7 @@ layout_collection.single_menu_number = layout_mg.add_center(
 )
 
 # SINGLE
+layout_collection.single_bg = layout_mg.add_item(layout_collection.single_bg)
 layout_collection.single_main = layout_mg.add_center(layout_collection.single_main)
 layout_collection.single_slot = layout_mg.add_right_of(
     item    = layout_collection.single_slot,
@@ -434,6 +483,7 @@ layout_collection.single_ko = layout_mg.add_left_of(
 )
 
 # DOUBLE
+layout_collection.double_bg = layout_mg.add_item(layout_collection.double_bg)
 layout_collection.double_clock = layout_mg.add_center(
     item    = layout_collection.double_clock,
     gap_y   = GameVariable.ZOOM_SIZE * 10,
@@ -537,6 +587,7 @@ layout_collection.double_2_ko = layout_mg.add_left_of(
 )
 
 # ENDLESS
+layout_collection.endless_bg = layout_mg.add_item(layout_collection.endless_bg)
 layout_collection.endless_main = layout_mg.add_center(layout_collection.endless_main)
 layout_collection.endless_slot = layout_mg.add_right_of(
     item    = layout_collection.endless_slot,
@@ -597,6 +648,7 @@ layout_collection.endless_ko = layout_mg.add_left_of(
 )
 
 # SONG
+layout_collection.song_bg = layout_mg.add_item(layout_collection.song_bg)
 song_main = layout_mg.add_item(layout_collection.song_main)
 song_name = layout_mg.add_right_of(
     item    = layout_collection.song_name,
@@ -618,6 +670,7 @@ song_rect = layout_mg.add_inner(
 )
 
 # HELP
+layout_collection.help_bg = layout_mg.add_item(layout_collection.help_bg)
 help_panel = layout_mg.add_center(
     item = layout_collection.help_panel,
     gap_y = ScreenConfig.height * 3 // 5 * (-1)
@@ -666,6 +719,7 @@ help_option_desc_el = layout_mg.add_inner(
     )
 
 # RANK
+layout_collection.rank_bg = layout_mg.add_item(layout_collection.rank_bg)
 rank_underline = layout_mg.add_center(item = layout_collection.rank_underline)
 rank_frame = layout_mg.add_center(item = layout_collection.rank_frame)
 rank_ranking = layout_mg.add_inner(
