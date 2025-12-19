@@ -1,7 +1,7 @@
 import json
 
-from core.debug import dbg
-from core.variable import PageTable, PathConfig
+from py.debug import dbg
+from py.variable import PageTable, PathConfig
 
 
 class JsonManager:
@@ -14,6 +14,7 @@ class JsonManager:
         self.read_dict_json(PathConfig.json_save)
         self.read_dict_json(PathConfig.json_help)
         self.read_list_json(PathConfig.json_display)
+        self.delete_data('dict', PageTable.HELP.value, PageTable.SINGLE.value)
 
     def read_list_json(self, file_path):
         """
@@ -28,7 +29,7 @@ class JsonManager:
             try:
                 enum_key = PageTable[key]
             except KeyError:
-                dbg.log(f"Warning: JSON key '{key}' 沒有對應的 PageTable enum，將使用字串 key")
+                dbg.error(f"Warning: JSON key '{key}' 沒有對應的 PageTable enum，將使用字串 key")
                 enum_key = key  # fallback 用字串 key
 
             # 存入 word_list_data
@@ -39,7 +40,7 @@ class JsonManager:
         讀取巢狀 dict JSON，並存到 word_dict_data
         """
         if not file_path.exists():
-            dbg.log(f"檔案不存在：{file_path}")
+            dbg.error(f"檔案不存在：{file_path}")
             return
 
         with open(file_path, "r", encoding = self.base) as f:
@@ -57,6 +58,47 @@ class JsonManager:
                 return json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             return {}
+
+    def delete_data(self, data_type, *keys):
+        """
+        刪除指定資料
+        - data_type: 'dict' 或 'list'
+        - *keys: 要刪除的路徑 (例如  PageTable.HELP.value, PageTable.SINGLE.value)
+        - return: bool
+        """
+        if not keys:
+            dbg.error("刪除失敗：未提供 Key")
+            return False
+
+        # 決定資料源
+        if data_type == 'dict':
+            data = self.word_dict_data
+        elif data_type == 'list':
+            data = self.word_list_data
+        else:
+            dbg.error(f"刪除失敗：不支援的型別 {data_type}")
+            return False
+
+        # 依照路徑尋找父節點
+        try:
+            # 我們要導航到「倒數第二個」節點
+            target_parent = data
+            for key in keys[:-1]:
+                target_parent = target_parent[key]
+
+            # 3. 執行刪除最後一個 key
+            last_key = keys[-1]
+            if last_key in target_parent:
+                del target_parent[last_key]
+                dbg.log(f"成功刪除 {data_type} 中的路徑: {keys}")
+                return True
+            else:
+                dbg.error(f"刪除失敗：Key '{last_key}' 不存在於路徑 {keys[:-1]} 中")
+                return False
+
+        except (KeyError, TypeError) as e:
+            dbg.error(f"刪除失敗：路徑錯誤 {keys} ({e})")
+            return False
 
     def write_json(self, file_path, data, mode = "w", encoding = None, indent = 4, only_keys = None):
         """
@@ -112,7 +154,7 @@ class JsonManager:
         elif data_type == 'list':
             data = self.word_list_data
         else:
-            dbg.log(f'{data_type} is not dict or list')
+            dbg.error(f'{data_type} is not dict or list')
             return []
 
         try:
@@ -128,5 +170,3 @@ class JsonManager:
             return [data]
 
 json_mg = JsonManager()
-
-
