@@ -1,6 +1,7 @@
 from core.hmi.song import SongVariable
 from core.location_layout.base import layout_config
-from core.location_layout.manager import LayoutItem, LayoutManager
+from core.location_layout.manager import (LayoutItem, LayoutManager,
+                                          LayoutNameManage)
 from core.location_layout.variable import LayoutName
 from core.screen.variable import ScreenConfig
 from core.tetris_game.variable import GameVariable
@@ -63,54 +64,54 @@ class LayoutCollection:
         )
         self.single_main = LayoutItem(
             category = PageTable.SINGLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_MAIN, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_MAIN, 0),
             size = Size(GameVariable.WIDTH_BLOCK * GameVariable.ZOOM_SIZE,
                         GameVariable.HEIGHT_BLOCK * GameVariable.ZOOM_SIZE),
         )
         self.single_slot = LayoutItem(
             category = PageTable.SINGLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_SLOT, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_SLOT, 0),
             size = Size(GameVariable.CELL_BLOCK * GameVariable.ZOOM_SIZE,
                         GameVariable.CELL_BLOCK * GameVariable.ZOOM_SIZE),
         )
         self.single_combo = LayoutItem(
             category = PageTable.SINGLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_COMBO, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_COMBO, 0),
             size = layout_config.game_combo_size,
         )
         self.single_score = LayoutItem(
             category = PageTable.SINGLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_SCORE, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_SCORE, 0),
             size = layout_config.game_score_size,
         )
         self.single_combo_number = LayoutItem(
             category = PageTable.SINGLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_COMBO_NUMBER, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_COMBO_NUMBER, 0),
             size = Size(layout_config.word_big * 2, layout_config.word_big * 2),
         )
         self.single_score_number = LayoutItem(
             category = PageTable.SINGLE,
-            name = LayoutName.game_suffix_key(LayoutName.BASE_NUMBER_BIG, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.BASE_NUMBER_BIG, 0),
             size = Size(layout_config.word * 3, layout_config.word * 3),
         )
         self.single_clock = LayoutItem(
             category = PageTable.SINGLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0),
             size = Size(ScreenConfig.width // 8.25, ScreenConfig.height // 5),
         )
         self.single_clock_min = LayoutItem(
             category = PageTable.SINGLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK_MIN, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK_MIN, 0),
             size = Size(layout_config.word * 2, layout_config.word * 2)
         )
         self.single_clock_sec = LayoutItem(
             category = PageTable.SINGLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK_SEC, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK_SEC, 0),
             size = Size(layout_config.word * 2, layout_config.word * 2)
         )
         self.single_ko = LayoutItem(
             category = PageTable.SINGLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_KO, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_KO, 0),
             size = layout_config.game_ko_size,
         )
 
@@ -123,94 +124,94 @@ class LayoutCollection:
         )
         self.double_clock = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0),
             size = Size(ScreenConfig.width // 8.25, ScreenConfig.height // 5),
         )
         self.double_clock_min = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK_MIN, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK_MIN, 0),
             size = Size(layout_config.word * 2, layout_config.word * 2)
         )
         self.double_clock_sec = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK_SEC, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK_SEC, 0),
             size = Size(layout_config.word * 2, layout_config.word * 2)
         )
 
         self.double_1_main = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_MAIN, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_MAIN, 0),
             size = Size(GameVariable.WIDTH_BLOCK * GameVariable.ZOOM_SIZE,
                         GameVariable.HEIGHT_BLOCK * GameVariable.ZOOM_SIZE),
             pos  = Position(ScreenConfig.width * 1 // 7, ScreenConfig.height // 6)
         )
         self.double_1_slot = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_SLOT, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_SLOT, 0),
             size = Size(GameVariable.CELL_BLOCK * GameVariable.ZOOM_SIZE,
                         GameVariable.CELL_BLOCK * GameVariable.ZOOM_SIZE),
         )
         self.double_1_combo = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_COMBO, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_COMBO, 0),
             size = layout_config.game_combo_size,
         )
         self.double_1_score = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_SCORE, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_SCORE, 0),
             size = layout_config.game_score_size,
         )
         self.double_1_combo_number = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_COMBO_NUMBER, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_COMBO_NUMBER, 0),
             size = Size(layout_config.word_big * 2, layout_config.word_big * 2),
         )
         self.double_1_score_number = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.BASE_NUMBER_BIG, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.BASE_NUMBER_BIG, 0),
             size = Size(layout_config.word * 3, layout_config.word * 3),
         )
         self.double_1_ko = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_KO, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_KO, 0),
             size = layout_config.game_ko_size,
         )
 
         self.double_2_main = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_MAIN, 1),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_MAIN, 1),
             size = Size(GameVariable.WIDTH_BLOCK * GameVariable.ZOOM_SIZE,
                         GameVariable.HEIGHT_BLOCK * GameVariable.ZOOM_SIZE),
         )
         self.double_2_slot = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_SLOT, 1),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_SLOT, 1),
             size = Size(GameVariable.CELL_BLOCK * GameVariable.ZOOM_SIZE,
                         GameVariable.CELL_BLOCK * GameVariable.ZOOM_SIZE),
         )
         self.double_2_combo = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_COMBO, 1),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_COMBO, 1),
             size = layout_config.game_combo_size,
         )
         self.double_2_score = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_SCORE, 1),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_SCORE, 1),
             size = layout_config.game_score_size,
         )
         self.double_2_combo_number = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_COMBO_NUMBER, 1),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_COMBO_NUMBER, 1),
             size = Size(layout_config.word_big * 2, layout_config.word_big * 2),
         )
         self.double_2_score_number = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.BASE_NUMBER_BIG, 1),
+            name = LayoutNameManage.game_suffix_key(LayoutName.BASE_NUMBER_BIG, 1),
             size = Size(layout_config.word * 3, layout_config.word * 3),
         )
         self.double_2_ko = LayoutItem(
             category = PageTable.DOUBLE,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_KO, 1),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_KO, 1),
             size = layout_config.game_ko_size,
         )
 
@@ -223,55 +224,55 @@ class LayoutCollection:
         )
         self.endless_main = LayoutItem(
             category = PageTable.ENDLESS,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_MAIN, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_MAIN, 0),
             size = Size(GameVariable.WIDTH_BLOCK * GameVariable.ZOOM_SIZE,
                         GameVariable.HEIGHT_BLOCK * GameVariable.ZOOM_SIZE),
             pos = Position(ScreenConfig.width // 7, ScreenConfig.height // 7)
         )
         self.endless_slot = LayoutItem(
             category = PageTable.ENDLESS,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_SLOT, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_SLOT, 0),
             size = Size(GameVariable.CELL_BLOCK * GameVariable.ZOOM_SIZE,
                         GameVariable.CELL_BLOCK * GameVariable.ZOOM_SIZE),
         )
         self.endless_combo = LayoutItem(
             category = PageTable.ENDLESS,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_COMBO, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_COMBO, 0),
             size = layout_config.game_combo_size,
         )
         self.endless_score = LayoutItem(
             category = PageTable.ENDLESS,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_SCORE, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_SCORE, 0),
             size = layout_config.game_score_size,
         )
         self.endless_combo_number = LayoutItem(
             category = PageTable.ENDLESS,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_COMBO_NUMBER, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_COMBO_NUMBER, 0),
             size = Size(layout_config.word_big * 2, layout_config.word_big * 2),
         )
         self.endless_score_number = LayoutItem(
             category = PageTable.ENDLESS,
-            name = LayoutName.game_suffix_key(LayoutName.BASE_NUMBER_BIG, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.BASE_NUMBER_BIG, 0),
             size = Size(layout_config.word * 3, layout_config.word * 3),
         )
         self.endless_clock = LayoutItem(
             category = PageTable.ENDLESS,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0),
             size = Size(ScreenConfig.width // 8.25, ScreenConfig.height // 5)
         )
         self.endless_clock_min = LayoutItem(
             category = PageTable.ENDLESS,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK_MIN, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK_MIN, 0),
             size = Size(layout_config.word * 2, layout_config.word * 2)
         )
         self.endless_clock_sec = LayoutItem(
             category = PageTable.ENDLESS,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_CLOCK_SEC, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK_SEC, 0),
             size = Size(layout_config.word * 2, layout_config.word * 2)
         )
         self.endless_ko = LayoutItem(
             category = PageTable.ENDLESS,
-            name = LayoutName.game_suffix_key(LayoutName.GAME_KO, 0),
+            name = LayoutNameManage.game_suffix_key(LayoutName.GAME_KO, 0),
             size = layout_config.game_ko_size,
         )
 

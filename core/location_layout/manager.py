@@ -2,8 +2,8 @@ from dataclasses import dataclass, field
 
 from core.debug import dbg
 from core.location_layout.base import layout_config
-
 from core.variable import Position, Size
+
 
 @dataclass
 class LayoutItem:
@@ -272,6 +272,10 @@ class LayoutManager:
         return items_in_category
 
 
+class LayoutNameManage:
+    def game_suffix_key(base, index: int) -> str:
+        """回傳例如 game_main_1, game_main_2"""
+        return f"{base.value}_{index + 1}"
 
 
 

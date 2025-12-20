@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pygame
 from core.location_layout.main import layout_mg
+from core.location_layout.manager import LayoutNameManage
 from core.location_layout.variable import LayoutName
 from core.screen.variable import ScreenConfig
 from core.variable import PageTable, PathBase, PathConfig, Size
@@ -43,21 +44,21 @@ class ScreenManager:
         # 載入圖片
         self.add_image(
             PageTable.SINGLE,
-            LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0),
+            LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0),
             PathConfig.img_clock,
-            layout_mg.get_item_size(PageTable.SINGLE, LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0))
+            layout_mg.get_item_size(PageTable.SINGLE, LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0))
         )
         self.add_image(
             PageTable.DOUBLE,
-            LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0),
+            LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0),
             PathConfig.img_clock,
-            layout_mg.get_item_size(PageTable.DOUBLE, LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0))
+            layout_mg.get_item_size(PageTable.DOUBLE, LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0))
         )
         self.add_image(
             PageTable.ENDLESS,
-            LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0),
+            LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0),
             PathConfig.img_clock,
-            layout_mg.get_item_size(PageTable.ENDLESS,LayoutName.game_suffix_key(LayoutName.GAME_CLOCK, 0))
+            layout_mg.get_item_size(PageTable.ENDLESS,LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0))
         )
         self.add_image(
             PageTable.RANK,

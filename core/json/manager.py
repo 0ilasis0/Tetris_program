@@ -1,7 +1,7 @@
 import json
 
-from py.debug import dbg
-from py.variable import PageTable, PathConfig
+from core.debug import dbg
+from core.variable import PageTable, PathConfig
 
 
 class JsonManager:
@@ -14,7 +14,6 @@ class JsonManager:
         self.read_dict_json(PathConfig.json_save)
         self.read_dict_json(PathConfig.json_help)
         self.read_list_json(PathConfig.json_display)
-        self.delete_data('dict', PageTable.HELP.value, PageTable.SINGLE.value)
 
     def read_list_json(self, file_path):
         """
