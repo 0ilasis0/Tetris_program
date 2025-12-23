@@ -12,7 +12,7 @@ class RankManager(BaseManager):
 
     def load_rank(self):
         """讀取 JSON 中的排行榜"""
-        self.state[PageTable.RANK.value] = json_mg.get_json_list("dict", PageTable.RANK.value)
+        self.state[PageTable.RANK.value] = json_mg.get_data("dict", PageTable.RANK.value)
 
     def add_score(self, min: int, sec: int, score: int):
         new_entry = [min, sec, score]

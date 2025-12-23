@@ -1,11 +1,16 @@
+'''只有在更新/特殊情況需要用到，一班正常遊玩時請關掉-------------------------'''
+# .JSON的生成
+# from core.json.variable import JsonConfig
+# JsonConfig.build_enable = True
+'''只有在更新/特殊情況需要用到，一班正常遊玩時請關掉-------------------------'''
+
 import pprint
 
 import pygame
 from core.base import Stack
-from core.json.build import build_json
-from core.json.manager import json_mg
 from core.font.rendering import rendering
 from core.hmi.song import song_mg
+from core.json.manager import json_mg
 from core.keyboard.base import keyboard_mg
 from core.page.base import page_mg
 from core.page.main import page_boot, page_navigation
@@ -15,18 +20,6 @@ from core.tetris_game.manager import player1, player2
 from core.variable import PageTable
 
 page_maps = {page: getattr(page_navigation, page.name) for page in PageTable}
-# 等同下方
-# page_maps = {
-#     PageTable.MENU:     page_navigation.MENU,
-#     PageTable.SINGLE:   page_navigation.SINGLE,
-#     PageTable.DOUBLE:   page_navigation.DOUBLE,
-#     ......
-#     PageTable.TETRIS_SINGLE:   page_navigation.TETRIS_SINGLE,
-# }
-
-# build_json()
-
-
 
 #
 # 初始化set

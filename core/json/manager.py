@@ -1,6 +1,8 @@
 import json
 
 from core.debug import dbg
+from core.json.base import RenewJSON
+from core.json.variable import JsonConfig
 from core.variable import PageTable, PathConfig
 
 
@@ -10,6 +12,12 @@ class JsonManager:
         self.word_list_data = {}
         self.word_dict_data = {}
 
+        if JsonConfig.build_enable:
+            self.build_json()
+
+        self.setup()
+
+    def setup(self):
         # 初始化json內容
         self.read_dict_json(PathConfig.json_save)
         self.read_dict_json(PathConfig.json_help)
@@ -140,32 +148,31 @@ class JsonManager:
 
         # --- 寫回檔案 ---
         with open(file_path, "w", encoding=encoding) as f:
-            json.dump(data_to_write, f, ensure_ascii=False, indent=indent)
+            json.dump(data_to_write, f, ensure_ascii = False, indent = indent)
 
-    def get_json_list(self, data_type, *keys):
+    def get_data(self, data_type, *keys):
         """
-        通用取得 list
-        - data_type: 'dict' 或 'list'，決定要用 word_dict_data 或 word_list_data
-        - *keys: JSON 層級 key，最上層到最底層
+        通用取得原始資料片段 (不強制轉型)
+        - data_type: 'dict' 或 'list'
+        - *keys: JSON 層級路徑
         """
-        if data_type == 'dict':
-            data = self.word_dict_data
-        elif data_type == 'list':
-            data = self.word_list_data
-        else:
-            dbg.error(f'{data_type} is not dict or list')
-            return []
+        data = self.word_dict_data if data_type == 'dict' else self.word_list_data
 
         try:
             for key in keys:
                 data = data[key]
-        except (KeyError, TypeError):
-            return []
-
-        # 轉成 list
-        if isinstance(data, list):
             return data
-        elif isinstance(data, str):
-            return [data]
+        except (KeyError, TypeError):
+            dbg.error(KeyError, TypeError)
+            return None
+
+    def build_json(self):
+        data = {}
+
+        # file_path = PathConfig.json_single
+        # RenewJSON.single_object(data)
+        # self.write_json(file_path, data, mode='w', encoding = None, indent = 4)
+
+        dbg.log(f"已生成路徑{file_path}的 JSON")
 
 json_mg = JsonManager()

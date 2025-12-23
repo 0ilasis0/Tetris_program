@@ -9,7 +9,7 @@ class LayoutConfig(BaseParameter):
     def __init__(self) -> None:
         """ 讀取來源資料 """
         # Menu
-        menu_lines = json_mg.get_json_list('list', PageTable.MENU)
+        menu_lines = json_mg.get_data('list', PageTable.MENU)
         self.menu_main_size = self._measure_text(content = menu_lines, shrink_map={'!':0.5})
 
         # GAME
@@ -18,14 +18,14 @@ class LayoutConfig(BaseParameter):
         self.game_ko_size    = self._measure_text(RenderingWord.KO.value, self.word_mini, self.word_mini)
 
         # SONG
-        song_lines = json_mg.get_json_list('list', PageTable.SONG)
+        song_lines = json_mg.get_data('list', PageTable.SONG)
         self.song_main_size = self._measure_text(content = song_lines)
 
         # HELP
         self.help_option_sizes = {}
         for mode in [PageTable.SINGLE.value, PageTable.DOUBLE.value, PageTable.ENDLESS.value]:
-            title = json_mg.get_json_list('dict', PageTable.HELP.value, mode, 'title')
-            description = json_mg.get_json_list('dict', PageTable.HELP.value, mode, 'description')
+            title = json_mg.get_data('dict', PageTable.HELP.value, mode, 'title')
+            description = json_mg.get_data('dict', PageTable.HELP.value, mode, 'description')
 
             self.help_option_sizes[mode] = {
                 "title": self._measure_text(content=title),

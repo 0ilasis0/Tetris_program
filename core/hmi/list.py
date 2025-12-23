@@ -67,7 +67,7 @@ class BaseManager:
 
         # 將 JSON 中的存檔值載入到 state，讓程式啟動時恢復上次設定
         for state_key, (section, json_key) in self.json_map.items():
-            v_list = json_mg.get_json_list('dict', section, json_key)
+            v_list = json_mg.get_data('dict', section, json_key)
             v = v_list[0] if v_list else None
 
             if v is None: continue
