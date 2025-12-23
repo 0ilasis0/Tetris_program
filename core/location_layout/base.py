@@ -1,8 +1,19 @@
+from dataclasses import dataclass, field
+
 from core.debug import dbg
 from core.font.variable import RenderingWord
 from core.json.manager import json_mg
 from core.location_layout.variable import BaseParameter
-from core.variable import PageTable, Size
+from core.variable import PageTable, Position, Size
+
+
+@dataclass
+class LayoutItem:
+    category: str       # 分類，例如 'MENU', 'SINGLE' 等
+    name: str           # 唯一名稱
+    size: Size
+    pos: Position = field(default_factory = Position.zero)
+    other = None
 
 
 class LayoutConfig(BaseParameter):

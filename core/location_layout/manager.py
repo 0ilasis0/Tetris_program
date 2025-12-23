@@ -1,18 +1,6 @@
-from dataclasses import dataclass, field
-
 from core.debug import dbg
-from core.location_layout.base import layout_config
+from core.location_layout.base import layout_config, LayoutItem
 from core.variable import Position, Size
-
-
-@dataclass
-class LayoutItem:
-    category: str       # 分類，例如 'MENU', 'SINGLE' 等
-    name: str           # 唯一名稱
-    size: Size
-    pos: Position = field(default_factory = Position.zero)
-    content = None      # 可以是文字、按鈕、圖片等
-
 
 
 class LayoutManager:
