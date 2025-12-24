@@ -30,15 +30,6 @@ class LayoutCollection:
             pos = pos or Position(0, 0)
         )
 
-    def _process_recursive_layout(self, container):
-        if isinstance(container, dict):
-            for key, value in container.items():
-                if isinstance(value, LayoutItem):
-                    container[key] = self.lay_mg.add_item(value)
-                elif isinstance(value, dict):
-                    self._process_recursive_layout(value)
-        return container
-
     def _setup_menu(self):
         # MENU
         # 背景：維持全螢幕，不縮放
@@ -127,7 +118,6 @@ class LayoutCollection:
             )
         )
 
-        # 假設 ZOOM_SIZE 是 32
         zoom_val = GameVariable.ZOOM_SIZE
         zoom_x2  = GameVariable.ZOOM_SIZE * 2
 
