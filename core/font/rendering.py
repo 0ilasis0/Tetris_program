@@ -2,7 +2,7 @@ from core.font.font_manager import fonts_mg
 from core.font.variable import RenderingWord
 from core.hmi.song import song_mg
 from core.json.manager import json_mg
-from core.location_layout.variable import BaseParameter
+from core.location_layout.variable import location_config
 from core.tetris_game.variable import GameVariable, RankVariable
 from core.variable import PageTable, PathConfig, colors
 
@@ -15,7 +15,7 @@ def rendering():
             page_table  = 'BASE',
             lines = [str(i)],
             color = colors[3],
-            size  = BaseParameter.word,
+            size  = location_config.word,
             font  = PathConfig.font_eng
         )
 
@@ -28,7 +28,7 @@ def rendering():
                 page_table  = PageTable.SINGLE,
                 lines = [str(j + i * (GameVariable.MAX_COMBO // 5))],
                 color = colors[i + 3],
-                size  = BaseParameter.word_big,
+                size  = location_config.word_big,
                 font  = PathConfig.font_eng
             )
     for i in range(GameVariable.MAX_KO_COUNT):
@@ -36,7 +36,7 @@ def rendering():
             page_table  = PageTable.SINGLE,
             lines = [RenderingWord.KO.value + str(i + 1)],
             color = colors[7],
-            size  = BaseParameter.word_mini,
+            size  = location_config.word_mini,
             font  = PathConfig.font_eng
         )
 
@@ -46,14 +46,14 @@ def rendering():
             page_table    = PageTable.SONG,
             lines   = [file_name],
             color   = colors[3],
-            size    = BaseParameter.word,
+            size    = location_config.word,
             font    = PathConfig.font_base
         )
     fonts_mg.rendering_word(
         page_table    = PageTable.SONG,
         lines   = [RenderingWord.SHUFFLE.value],
         color   = colors[13],
-        size    = BaseParameter.word,
+        size    = location_config.word,
         font    = PathConfig.font_base
     )
 
@@ -65,7 +65,7 @@ def rendering():
         page_table    = PageTable.MENU,
         lines   = json_mg.word_list_data.get(PageTable.MENU, []),
         color   = colors[3],
-        size    = BaseParameter.word,
+        size    = location_config.word,
         font    = PathConfig.font_base
     )
 
@@ -74,14 +74,14 @@ def rendering():
         page_table    = PageTable.SINGLE,
         lines   = [RenderingWord.COMBO.value],
         color   = colors[3],
-        size    = BaseParameter.word,
+        size    = location_config.word,
         font    = PathConfig.font_eng2
     )
     fonts_mg.rendering_word(
         page_table    = PageTable.SINGLE,
         lines   = [RenderingWord.SCORE.value],
         color   = colors[3],
-        size    = BaseParameter.word,
+        size    = location_config.word,
         font    = PathConfig.font_eng2
     )
 
@@ -99,7 +99,7 @@ def rendering():
         page_table    = PageTable.SONG,
         lines   = json_mg.word_list_data.get(PageTable.SONG, []),
         color   = colors[3],
-        size    = BaseParameter.word,
+        size    = location_config.word,
         font    = PathConfig.font_base
     )
 
@@ -110,7 +110,7 @@ def rendering():
             page_table = PageTable.HELP,
             lines      = content["title"],
             color      = colors[3],
-            size       = BaseParameter.word,
+            size       = location_config.word,
             font       = PathConfig.font_base
         )
 
@@ -118,7 +118,7 @@ def rendering():
             page_table = PageTable.HELP,
             lines      = content["description"],
             color      = colors[3],
-            size       = BaseParameter.word,
+            size       = location_config.word,
             font       = PathConfig.font_base
         )
 
@@ -130,27 +130,27 @@ def rendering():
             page_table    = PageTable.RANK,
             lines   = [RenderingWord.RANKING.value + f'{number + 1}'],
             color   = colors[8],
-            size    = BaseParameter.word_big,
+            size    = location_config.word_big,
             font    = PathConfig.font_base
         )
     fonts_mg.rendering_word(
         page_table    = PageTable.RANK,
         lines   = [RenderingWord.MIN.value],
         color   = colors[3],
-        size    = BaseParameter.word,
+        size    = location_config.word,
         font    = PathConfig.font_base
     )
     fonts_mg.rendering_word(
         page_table    = PageTable.RANK,
         lines   = [RenderingWord.SEC.value],
         color   = colors[3],
-        size    = BaseParameter.word,
+        size    = location_config.word,
         font    = PathConfig.font_base
     )
     fonts_mg.rendering_word(
         page_table    = PageTable.RANK,
         lines   = [RenderingWord.FRACTION.value],
         color   = colors[3],
-        size    = BaseParameter.word,
+        size    = location_config.word,
         font    = PathConfig.font_base
     )

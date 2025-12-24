@@ -1,6 +1,6 @@
 import pygame
 from core.debug import dbg
-from core.location_layout.variable import BaseParameter
+from core.location_layout.variable import location_config
 from core.variable import PathConfig, Position
 
 
@@ -61,8 +61,8 @@ class FontsManager:
             category,
             index,
             pos,
-            y_gap = BaseParameter.y_gap,
-            x_gap = BaseParameter.word,
+            y_gap = location_config.y_gap,
+            x_gap = location_config.word,
             fixed = True,
             alpha_pec = 100,
             direction = "vertical"

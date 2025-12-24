@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from core.debug import dbg
 from core.font.variable import RenderingWord
 from core.json.manager import json_mg
-from core.location_layout.variable import BaseParameter
+from core.location_layout.variable import location_config
 from core.variable import PageTable, Position, Size
 
 
@@ -16,7 +16,7 @@ class LayoutItem:
     other = None
 
 
-class LayoutConfig(BaseParameter):
+class LayoutConfig():
     def __init__(self) -> None:
         """ 讀取來源資料 """
         # Menu
@@ -24,9 +24,9 @@ class LayoutConfig(BaseParameter):
         self.menu_main_size = self._measure_text(content = menu_lines, shrink_map={'!':0.5})
 
         # GAME
-        self.game_score_size = self._measure_text(RenderingWord.SCORE.value, self.word_mini, self.word_mini)
+        self.game_score_size = self._measure_text(RenderingWord.SCORE.value, location_config.word_mini, location_config.word_mini)
         self.game_combo_size = self._measure_text(RenderingWord.COMBO.value)
-        self.game_ko_size    = self._measure_text(RenderingWord.KO.value, self.word_mini, self.word_mini)
+        self.game_ko_size    = self._measure_text(RenderingWord.KO.value, location_config.word_mini, location_config.word_mini)
 
         # SONG
         song_lines = json_mg.get_data('list', PageTable.SONG)
@@ -46,8 +46,8 @@ class LayoutConfig(BaseParameter):
         # RANK
         self.rank_ranking_size = self._measure_text(
             content = RenderingWord.RANKING.value,
-            line_height = BaseParameter.word_big,
-            word_width = BaseParameter.word_big
+            line_height = location_config.word_big,
+            word_width = location_config.word_big
         )
         self.rank_sec_size = self._measure_text(RenderingWord.SEC.value)
         self.rank_min_size = self._measure_text(RenderingWord.MIN.value)
@@ -57,8 +57,8 @@ class LayoutConfig(BaseParameter):
     @staticmethod
     def _measure_text(
             content,
-            line_height = BaseParameter.word,
-            word_width = BaseParameter.word,
+            line_height = location_config.word,
+            word_width = location_config.word,
             shrink_map = None,
             direction = "vertical"
         ):
@@ -100,5 +100,35 @@ class LayoutConfig(BaseParameter):
             height = line_height
 
         return Size(width, height)
+
+    def dict_to_layout_items(self, data):
+        """
+        遞迴轉換字典內容為 LayoutItem 物件
+        - data: 傳入的原始字典或列表
+        - category_key: 當子層沒提供 category 時，預設使用的標籤
+        """
+        # 如果是字典，檢查是否包含 LayoutItem 的特徵 Key
+        if isinstance(data, dict):
+            # 判斷標準：只要有 name, size, pos 就視為目標物件
+            if all(k in data for k in ("name", "size", "pos")):
+                return LayoutItem(
+                    # 如果資料內有 category 就用它，否則用父層的 Key (例如 'SINGLE')
+                    category = PageTable.SINGLE,
+                    name     = data["name"],
+                    size     = Size(*data["size"]),
+                    pos      = Position(*data["pos"]),
+                    other    = data.get("other")
+                )
+            else:
+                # 如果不是目標物件，繼續往更深層遞迴
+                # 並將目前的 Key 作為潛在的 category (parent_key) 傳下去
+                return {k: self.dict_to_layout_items(v) for k, v in data.items()}
+
+        # 如果是列表，處理列表中的每個元素
+        elif isinstance(data, list):
+            return [self.dict_to_layout_items(i) for i in data]
+
+        # 基本資料型別直接回傳
+        return data
 
 layout_config = LayoutConfig()

@@ -3,15 +3,23 @@ from enum import Enum
 from core.screen.variable import ScreenConfig
 
 
-class BaseParameter:
-    zoom            = ScreenConfig.tetris_cell
-    zoom_plus       = ScreenConfig.tetris_cell * 4
-    word            = ScreenConfig.word
-    word_mini       = round(word * 0.5)
-    word_big        = round(word * 1.5)
-    y_gap           = round(word * 1.5)
-    y_gap_mini      = round(word_mini * 1.5)
-    y_gap_big       = round(word_big * 1.5)
+class LocationConfig:
+    def __init__(self) -> None:
+        self.zoom       = self.scale(32)
+        self.zoom_plus  = self.scale(128)
+        self.word       = self.scale(38)
+        self.word_mini  = self.scale(19)
+        self.word_big   = self.scale(57)
+        self.y_gap      = self.scale(57)
+        self.y_gap_mini = self.scale(29)
+        self.y_gap_big  = self.scale(86)
+
+    def scale(self, val: int) -> int:
+        """ 將設計稿數值 (1980x1080) 轉換為當前螢幕數值 """
+        if val == 0: return 0
+        return int(val * ScreenConfig.RATIO)
+
+location_config = LocationConfig()
 
 
 

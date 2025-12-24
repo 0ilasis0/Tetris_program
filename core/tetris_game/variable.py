@@ -1,7 +1,7 @@
 from enum import Enum
 
 import pygame
-from core.screen.variable import ScreenConfig
+from core.location_layout.variable import location_config
 from core.variable import colors
 
 #  0 0 0 0
@@ -55,7 +55,7 @@ class GameVariable:
     WIDTH_BLOCK     = 10
     HEIGHT_BLOCK    = 20
     CELL_BLOCK      = 4
-    ZOOM_SIZE       = ScreenConfig.tetris_cell
+    ZOOM_SIZE       = location_config.scale(32)
 
     # COLORS
     EMPTY_COLOR = colors[1]

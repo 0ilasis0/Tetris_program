@@ -5,9 +5,8 @@ from core.hmi.rank import rank_mg
 from core.hmi.song import song_mg
 from core.hmi.variable import SongVariable
 from core.keyboard.base import keyboard_mg
-from core.location_layout.base import layout_config
 from core.location_layout.main import layout_mg
-from core.location_layout.variable import LayoutName
+from core.location_layout.variable import LayoutName, location_config
 from core.page.base import page_mg
 from core.page.navigation import BasePageNavigation
 from core.page.tree_path import tree_path_table
@@ -55,7 +54,7 @@ class PageNavigation(BasePageNavigation):
             category  = PageTable.MENU,
             name        = LayoutName.MENU_RECT,
             shape       = 'rect',
-            pos         = Position(menu_rect.pos.x, menu_rect.pos.y + keyboard_mg.hook_y * layout_config.y_gap),
+            pos         = Position(menu_rect.pos.x, menu_rect.pos.y + keyboard_mg.hook_y * location_config.y_gap),
             size        = layout_mg.get_item_size(PageTable.MENU, LayoutName.MENU_RECT),
             color       = colors[7],
             hollow      = 5,
@@ -113,7 +112,7 @@ class PageNavigation(BasePageNavigation):
             name        = LayoutName.SONG_BLOCK,
             shape       = 'rect',
             pos         = layout_mg.get_item_pos(PageTable.SONG, LayoutName.SONG_BLOCK),
-            size        = Size(layout_config.zoom * song_mg.state.get(JsonPath.VOLUME.value), song_block.size.height),
+            size        = Size(location_config.zoom * song_mg.state.get(JsonPath.VOLUME.value), song_block.size.height),
             color       = colors[5],
             hollow      = 0,
             fixed       = False,
@@ -124,7 +123,7 @@ class PageNavigation(BasePageNavigation):
             category  = PageTable.SONG,
             name        = LayoutName.SONG_RECT,
             shape       = 'rect',
-            pos         = Position(song_rect.pos.x, song_rect.pos.y + keyboard_mg.hook_y * layout_config.y_gap),
+            pos         = Position(song_rect.pos.x, song_rect.pos.y + keyboard_mg.hook_y * location_config.y_gap),
             size        = layout_mg.get_item_size(PageTable.SONG, LayoutName.SONG_RECT),
             color       = colors[7],
             hollow      = 5,

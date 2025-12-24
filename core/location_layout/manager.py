@@ -1,5 +1,6 @@
 from core.debug import dbg
-from core.location_layout.base import layout_config, LayoutItem
+from core.location_layout.base import LayoutItem
+from core.location_layout.variable import location_config
 from core.variable import Position, Size
 
 
@@ -82,7 +83,7 @@ class LayoutManager:
             self,
             item: LayoutItem,
             target,
-            gap = layout_config.y_gap,
+            gap = location_config.y_gap,
             align = 'left'
         ):
         '''
