@@ -16,7 +16,7 @@ class LayoutManager:
             if (item.pos.x is not None) and (item.pos.y is not None):
                 (x, y) = (item.pos.x, item.pos.y)
             else:
-                dbg.log(f"[add_item] No position for item '{item.category}.{item.name}'")
+                dbg.error(f"[add_item] No position for item '{item.category}.{item.name}'")
                 return None
 
         if item.category not in self.items:
@@ -26,7 +26,7 @@ class LayoutManager:
 
         # 如果名字已存在 → 警告
         if item.name in self.items[item.category]:
-            dbg.log(f"[add_item] Overwriting item '{item.category}.{item.name}'")
+            dbg.error(f"[add_item] Overwriting item '{item.category}.{item.name}'")
 
         # 存入 dict
         self.items[item.category][item.name] = item
@@ -166,7 +166,7 @@ class LayoutManager:
                     left_bt center_bt right_bt
         '''
         if (item.pos is None) or (target.pos is None):
-            dbg.log(f'{item.name}->{item.pos} or {target.name}->{target.pos} pos is None')
+            dbg.error(f'{item.name}->{item.pos} or {target.name}->{target.pos} pos is None')
         horizontal, vertical = align.split("_")
 
         # 水平
@@ -198,7 +198,7 @@ class LayoutManager:
         item = self.get_item(category, name, index)
 
         if item is None:
-            dbg.log(f'{category}->{name} get_item is error')
+            dbg.error(f'{category}->{name} get_item is error')
             return None
 
         item_x, item_y = item.pos.x, item.pos.y
@@ -213,7 +213,7 @@ class LayoutManager:
         item = self.get_item(category, name, index)
 
         if item is None:
-            dbg.log(f'{category}->{name} get_item is error')
+            dbg.error(f'{category}->{name} get_item is error')
             return None
 
         return Size(item.size.width, item.size.height)
@@ -225,25 +225,25 @@ class LayoutManager:
         - 不存在則回傳 None
         """
         if category not in self.items:
-            dbg.log(f"{category} 不存在")
+            dbg.error(f"{category} 不存在")
             return None
 
         if name is not None:
             item = self.items.get(category, {}).get(name)
             if not item:
-                dbg.log(f"{category} -> {name} 不存在")
+                dbg.error(f"{category} -> {name} 不存在")
                 return None
             return item
 
         elif index is not None:
             items = list(self.items[category].values())
             if not (0 <= index < len(items)):
-                dbg.log(f"{category} index {index} 超出範圍")
+                dbg.error(f"{category} index {index} 超出範圍")
                 return None
             return items[index]
 
         else:
-            dbg.log("get_item 必須提供 name 或 index")
+            dbg.error("get_item 必須提供 name 或 index")
             return None
 
     def get_items_by_category(
@@ -260,6 +260,12 @@ class LayoutManager:
 
         return items_in_category
 
+    def clear_items(self):
+        self.items = {}
+
+    def update_screen_size(self, width, height):
+        self.screen_size = Size(width, height)
+
 
 class LayoutNameManage:
     def game_suffix_key(base, index: int) -> str:
@@ -273,7 +279,7 @@ class LayoutNameManage:
     #         self,
     #         items,
     #         start_pos,
-    #         gap = layout_config.y_gap,
+    #         gap = location_config.y_gap,
     #         align = 'left'
     #         ):
     #     '''
@@ -299,7 +305,7 @@ class LayoutNameManage:
     #         self,
     #         items,
     #         start_pos,
-    #         gap = layout_config.y_gap,
+    #         gap = location_config.y_gap,
     #         align='top'
     #         ):
     #     '''

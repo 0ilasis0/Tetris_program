@@ -13,7 +13,7 @@ from core.page.tree_path import tree_path_table
 from core.page.variable import HelpConfig, RankConfig
 from core.screen.base import screen_mg
 from core.screen.drawing import draw_mg
-from core.tetris_game.main import (TetrisCore, game_clock, individual_tetris,
+from core.tetris_game.main import (TetrisCore, clock_game, individual_tetris,
                                    main_tetris_game)
 from core.tetris_game.manager import player1, player2
 from core.tetris_game.variable import BaseVariable, GameVariable, RankVariable
@@ -33,7 +33,7 @@ def main_page():
     if page_function is not None:
         page_function()
     else:
-        dbg.log(f"no load {page_mg.current_page}")
+        dbg.error(f"no load {page_mg.current_page}")
 
 
 
@@ -43,7 +43,7 @@ class PageNavigation(BasePageNavigation):
 
     def MENU(self):
         # 初始化螢幕
-        self.window_all_init(True, False)
+        self.window_all_init(PageTable.MENU, False, False, True, False)
         draw_mg.maps_clear(PageTable.MENU)
         self.base_common(PageTable.MENU)
 
@@ -63,7 +63,7 @@ class PageNavigation(BasePageNavigation):
         draw_mg.current_draw_dynamic = [PageTable.MENU]
 
     def SINGLE_MENU(self):
-        self.window_all_init(True, False)
+        self.window_all_init(PageTable.SINGLE_MENU, False, False, True, False)
         draw_mg.maps_clear(PageTable.SINGLE_MENU)
         self.base_common(PageTable.SINGLE_MENU)
 
@@ -101,7 +101,7 @@ class PageNavigation(BasePageNavigation):
         # --------- 核心 ---------
         song_mg.main_process()
 
-        self.window_all_init(True, False)
+        self.window_all_init(PageTable.SONG, True, False, True, False)
         draw_mg.maps_clear(PageTable.SONG)
         self.base_common(PageTable.SONG)
 
@@ -142,11 +142,18 @@ class PageNavigation(BasePageNavigation):
         draw_mg.current_draw_dynamic = [PageTable.SONG]
 
     def HELP(self):
-        self.window_all_init(True, False, True)
+        self.window_all_init(PageTable.HELP, True, True, False, False)
         self.base_common(PageTable.HELP)
 
         # 玩家選擇 img_panel
-        screen_mg.add_image(PageTable.HELP, LayoutName.HELP_PANEL, PathConfig.img_panel[keyboard_mg.hook_x])
+        name = LayoutName.HELP_PANEL.serial_list[keyboard_mg.hook_x]
+        screen_mg.add_image(
+            PageTable.HELP,
+            name,
+            PathConfig.img_panel[keyboard_mg.hook_x],
+            layout_mg.get_item_size(PageTable.HELP, name),
+            False
+        )
 
         # 標題文字
         for i, (layout_name, idx) in enumerate(HelpConfig.title_items):
@@ -176,7 +183,7 @@ class PageNavigation(BasePageNavigation):
     def game_common(self, category, player: TetrisCore = player1):
         ''' 統一使用SINGLE '''
         if player == player1:
-            self.window_all_init(True, False)
+            self.window_all_init(category, True, False, True, False)
             draw_mg.maps_clear(category)
 
         self.base_common(category)
@@ -184,7 +191,7 @@ class PageNavigation(BasePageNavigation):
         # 共同核心
         main_tetris_game(player = player)
         # timer
-        min, sec = game_clock.get_min_sec()
+        min, sec = clock_game.get_min_sec()
         # 不同mode的核心
         individual_tetris.main_process(category, player, min, sec)
 
@@ -271,7 +278,7 @@ page_navigation = PageNavigation()
 class PageBoot():
     ''' 只會在初次進入當前頁面時載入一次下次刷屏不會進來，但下次進入頁面又會進來 '''
     def MENU(self):
-        page_navigation.window_all_init()
+        page_navigation.window_all_init(PageTable.MENU)
         draw_mg.maps_clear(PageTable.MENU, True)
 
         # 目錄文字
@@ -282,7 +289,7 @@ class PageBoot():
         )
 
     def SINGLE_MENU(self):
-        page_navigation.window_all_init()
+        page_navigation.window_all_init(PageTable.SINGLE_MENU)
 
         # 畫基本關卡方塊
         single_menu_rect = layout_mg.get_item(PageTable.SINGLE_MENU, LayoutName.SINGLE_MENU_RECT)
@@ -314,7 +321,7 @@ class PageBoot():
                 )
 
     def SINGLE(self):
-        page_navigation.window_all_init()
+        page_navigation.window_all_init(PageTable.SINGLE)
         # 初始化遊戲狀態
         player1.reset(attack_sw = True, level_sw = False)
         player1.level_mg.update_level(player = player1, level = player1.level_mg.current_level)
@@ -322,7 +329,7 @@ class PageBoot():
         self.game_common(PageTable.SINGLE, player1)
 
     def DOUBLE(self):
-        page_navigation.window_all_init()
+        page_navigation.window_all_init(PageTable.DOUBLE)
         # 初始化遊戲狀態
         player1.reset()
         player2.reset()
@@ -332,13 +339,13 @@ class PageBoot():
         player2.attack_mg.enabled = True
 
     def ENDLESS(self):
-        page_navigation.window_all_init()
+        page_navigation.window_all_init(PageTable.ENDLESS)
         # 初始化遊戲狀態
         player1.reset()
         self.game_common(PageTable.ENDLESS, player1)
 
     def SONG(self):
-        page_navigation.window_all_init()
+        page_navigation.window_all_init(PageTable.SONG)
         draw_mg.maps_clear(PageTable.SONG, True)
         song_mg.boot_base(PageTable.SONG)
 
@@ -359,13 +366,10 @@ class PageBoot():
         )
 
     def HELP(self):
-        page_navigation.window_all_init()
-
-        # 加入 lace 邊框
-        screen_mg.add_image(PageTable.HELP, LayoutName.HELP_LACE, PathConfig.img_lace)
+        page_navigation.window_all_init(PageTable.HELP)
 
     def RANK(self):
-        page_navigation.window_all_init()
+        page_navigation.window_all_init(PageTable.RANK)
 
         rank_data = rank_mg.get_rank()
         for i, (extra_x, extra_y) in RankConfig.extra_pos.items():
@@ -449,8 +453,8 @@ class PageBoot():
     def game_common(self, category, player: TetrisCore = player1):
         if player == player1:
             draw_mg.maps_clear(category, True)
-            game_clock.reset()
-            game_clock.start()
+            clock_game.reset()
+            clock_game.start()
 
         # 主體網格線
         player.draw.draw_grid(

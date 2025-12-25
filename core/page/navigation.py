@@ -18,13 +18,19 @@ class ToolPageNavigation:
 
     def window_all_init(
             self,
+            page_table: PageTable,
+            font_dynaic: bool = True,
+            img_dynaic: bool = True,
             draw_sw: bool = True,
-            fonts_static_sw: bool = True,
-            fonts_dynamic_sw: bool = True,
-            ):
+            fonts_static: bool = True,
+            img_static: bool = False
+        ):
         if draw_sw:
             self.draw_mg.current_clear()
-        self.fonts_mg.current_clear(fonts_static_sw, fonts_dynamic_sw)
+        if img_static or img_dynaic:
+            screen_mg.clear_images(page_table, img_static, img_dynaic)
+        if fonts_static or font_dynaic:
+            self.fonts_mg.current_clear(fonts_static, font_dynaic)
 
 
 
@@ -65,7 +71,7 @@ class BasePageNavigation(ToolPageNavigation):
         if handler:
             handler(current_table)
         else:
-            dbg.log(f"[handle_enter] {current_table} 沒有對應的 handler")
+            dbg.error(f"[handle_enter] {current_table} 沒有對應的 handler")
 
     def handle_back(self, current_table):
         ''' 處理按下 Back 的共用邏輯 '''
@@ -112,6 +118,7 @@ class NavigationList:
         self.base_nav.page_mg.history_stack.visit(current_table, next_table[self.base_nav.keyboard_mg.hook_y])
 
 
+
 class NavigationSingleMenu:
     def __init__(self, base_nav: BasePageNavigation, player:TetrisCore = player1) -> None:
         self.base_nav = base_nav
@@ -129,7 +136,7 @@ class NavigationSingleMenu:
         # 取得當前 hook 的 cell
         cell = self.grid_mg.get_cell(self.base_nav.keyboard_mg.hook_x, self.base_nav.keyboard_mg.hook_y)
         if cell.is_empty():
-            dbg.log("NavigationSingleMenu.enter_handle: cell is empty")
+            dbg.error("NavigationSingleMenu.enter_handle: cell is empty")
             return
 
         self.player.level_mg.current_level = (self.base_nav.keyboard_mg.hook_x + self.base_nav.keyboard_mg.hook_y * 5)

@@ -10,7 +10,7 @@ from core.tetris_game.variable import GameState
 from core.variable import PageTable
 
 # 生成timer
-game_clock = ClockTimer()
+clock_game = ClockTimer()
 
 def main_tetris_game(player: TetrisCore):
     # 若是 STATE_GAMEOVER 自動跳回前一頁面

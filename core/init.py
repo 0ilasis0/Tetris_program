@@ -28,7 +28,7 @@ page_maps = {page: getattr(page_navigation, page.name) for page in PageTable}
 pygame.init()
 
 ''' screen '''
-screen_mg.setup()
+screen_mg.reload_setup()
 
 ''' keyboard '''
 keyboard_mg.setup(

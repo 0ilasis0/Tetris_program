@@ -20,10 +20,11 @@ class ScreenManager:
         self.current_page: PageTable = PageTable.MENU
 
         # 每個 PageTable 的圖片字典： { name: {surface, x, y, z_index(決定圖片先後)} }
-        self.page_images: dict[PageTable, dict[str, dict]] = {page: {} for page in PageTable}
+        self.page_images_static: dict[PageTable, dict[str, dict]] = {page: {} for page in PageTable}
+        self.page_images_dynaic: dict[PageTable, dict[str, dict]] = {page: {} for page in PageTable}
 
     # ========= 視窗設定 =========
-    def setup(self):
+    def reload_setup(self):
         self.window = pygame.display.set_mode((ScreenConfig.width, ScreenConfig.height))
         pygame.display.set_caption(ScreenConfig.title_name)
 
@@ -42,23 +43,24 @@ class ScreenManager:
         self.add_image(PageTable.RANK,          LayoutName.RANK_BG,         PathConfig.bg1, layout_mg.get_item_size(PageTable.RANK, LayoutName.RANK_BG))
 
         # 載入圖片
+        name = LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0)
         self.add_image(
             PageTable.SINGLE,
-            LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0),
+            name,
             PathConfig.img_clock,
-            layout_mg.get_item_size(PageTable.SINGLE, LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0))
+            layout_mg.get_item_size(PageTable.SINGLE, name)
         )
         self.add_image(
             PageTable.DOUBLE,
-            LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0),
+            name,
             PathConfig.img_clock,
-            layout_mg.get_item_size(PageTable.DOUBLE, LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0))
+            layout_mg.get_item_size(PageTable.DOUBLE, name)
         )
         self.add_image(
             PageTable.ENDLESS,
-            LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0),
+            name,
             PathConfig.img_clock,
-            layout_mg.get_item_size(PageTable.ENDLESS,LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0))
+            layout_mg.get_item_size(PageTable.ENDLESS,name)
         )
         self.add_image(
             PageTable.RANK,
@@ -72,35 +74,55 @@ class ScreenManager:
             PathConfig.img_frame,
             layout_mg.get_item_size(PageTable.RANK, LayoutName.RANK_FRAME)
         )
+        self.add_image(
+            PageTable.HELP,
+            LayoutName.HELP_LACE,
+            PathConfig.img_lace,
+            layout_mg.get_item_size(PageTable.HELP, LayoutName.HELP_LACE)
+        )
 
     # ========= 圖片 =========
-    def add_image(self, page: PageTable, name: str, file_path: Path, size: Size | None = None):
+    def add_image(
+            self,
+            page:
+            PageTable,
+            name: str,
+            file_path: Path,
+            size: Size | None = None,
+            fix: bool = True
+        ):
         # 無縮放原圖cache存儲檢查
         if (file_path, None) not in self.img_cache:
             self.img_cache[(file_path, None)] = pygame.image.load(str(file_path))
 
-        # 將原圖cache暫存
-        raw = self.img_cache[(file_path, None)]
-
         # 決定是否縮放原圖並存入快取
         key = (file_path, size)
+
         if key not in self.img_cache:
+            # 將原圖cache暫存
+            raw = self.img_cache[(file_path, None)]
             if size is None:
                 self.img_cache[key] = raw
             else:
                 self.img_cache[key] = pygame.transform.smoothscale(raw, (size.width, size.height))
 
         # 更新 page_images
-        self.page_images[page][name] = self.img_cache[key]
+        if fix:
+            self.page_images_static[page][name] = self.img_cache[key]
+        else:
+            self.page_images_dynaic[page][name] = self.img_cache[key]
 
     def remove_image(self, page: PageTable, name: str):
         """刪除圖片"""
-        if name in self.page_images[page]:
-            del self.page_images[page][name]
+        if name in self.page_images_static[page]:
+            del self.page_images_static[page][name]
 
-    def clear_images(self, page: PageTable):
+    def clear_images(self, page: PageTable, static = True, dynamic = True):
         """清空頁面圖片"""
-        self.page_images[page].clear()
+        if static:
+            self.page_images_static[page].clear()
+        if dynamic:
+            self.page_images_dynaic[page].clear()
 
     # ========= 頁面切換 =========
     def switch_page(self, page: PageTable):

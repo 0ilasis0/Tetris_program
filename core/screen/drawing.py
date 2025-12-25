@@ -40,7 +40,7 @@ class DrawManager():
             "hollow": hollow
         })
 
-    def show_picture(self, screen, page_tables, fixed):
+    def show_draw(self, screen, page_tables, fixed):
         target_map = self.draw_static_maps if fixed else self.draw_dynamic_maps
 
         if not isinstance(page_tables, list):

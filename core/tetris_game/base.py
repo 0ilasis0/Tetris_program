@@ -1,6 +1,8 @@
 import random
 
 from core.tetris_game.variable import GameVariable, figures
+from core.location_layout.variable import location_config
+location_config
 from core.variable import Position, Size
 
 
@@ -74,7 +76,7 @@ class Field:
             self,
             width_block,
             height_block,
-            zoom = GameVariable.ZOOM_SIZE
+            zoom = location_config.zoom
         ):
         self.width_block = width_block
         self.height_block = height_block

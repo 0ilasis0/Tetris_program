@@ -7,7 +7,7 @@ from core.interrupt import main_interrupt
 from core.keyboard.main import main_keyboard
 from core.page.main import main_page
 from core.screen.main import main_screen
-
+    
 while central_mg.running:
     # 每一幀開頭更新時間
     central_mg.update_clock(60)

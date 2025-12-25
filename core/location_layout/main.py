@@ -11,6 +11,11 @@ from core.variable import PageTable, Position, Size
 class LayoutCollection:
     def __init__(self, lay_mg: LayoutManager) -> None:
         self.lay_mg = lay_mg
+        self.reload_setup()
+
+    def reload_setup(self):
+        self.lay_mg.clear_items()
+        self.lay_mg.update_screen_size(ScreenConfig.width, ScreenConfig.height)
 
         self._setup_menu()
         self._setup_single_menu()
@@ -113,13 +118,14 @@ class LayoutCollection:
             self._create_item(
                 PageTable.SINGLE,
                 LayoutNameManage.game_suffix_key(LayoutName.GAME_MAIN, 0),
-                Size(GameVariable.WIDTH_BLOCK * GameVariable.ZOOM_SIZE,
-                     GameVariable.HEIGHT_BLOCK * GameVariable.ZOOM_SIZE),
+                Size(GameVariable.WIDTH_BLOCK * location_config.zoom,
+                     GameVariable.HEIGHT_BLOCK * location_config.zoom),
             )
         )
 
-        zoom_val = GameVariable.ZOOM_SIZE
-        zoom_x2  = GameVariable.ZOOM_SIZE * 2
+        # 假設 ZOOM_SIZE 是 32
+        zoom_val = location_config.zoom
+        zoom_x2  = location_config.zoom * 2
 
         self.single_slot = self.lay_mg.add_right_of(
             item = self._create_item(
@@ -222,8 +228,8 @@ class LayoutCollection:
         )
 
     def _setup_double_game(self):
-        zoom_val = GameVariable.ZOOM_SIZE
-        zoom_x2  = GameVariable.ZOOM_SIZE * 2
+        zoom_val = location_config.zoom
+        zoom_x2  = location_config.zoom * 2
         clock_size = Size(location_config.scale(240), location_config.scale(216))
         clock_w_div_8 = location_config.scale(30)
         clock_h_div_8 = location_config.scale(27)
@@ -419,8 +425,8 @@ class LayoutCollection:
         )
 
     def _setup_endless_game(self):
-        zoom_val = GameVariable.ZOOM_SIZE
-        zoom_x2  = GameVariable.ZOOM_SIZE * 2
+        zoom_val = location_config.zoom
+        zoom_x2  = location_config.zoom * 2
         clock_size = Size(location_config.scale(240), location_config.scale(216))
         clock_w_div_8 = location_config.scale(30)
         clock_h_div_8 = location_config.scale(27)
@@ -560,22 +566,22 @@ class LayoutCollection:
             item = self._create_item(
                 PageTable.SONG,
                 LayoutName.SONG_NAME,
-                Size(SongVariable.WIDTH_BLOCK * GameVariable.ZOOM_SIZE,
-                     SongVariable.HEIGHT_BLOCK * GameVariable.ZOOM_SIZE),
+                Size(SongVariable.WIDTH_BLOCK * location_config.zoom,
+                     SongVariable.HEIGHT_BLOCK * location_config.zoom),
             ),
             target = self.song_main,
-            gap_x = GameVariable.ZOOM_SIZE,
+            gap_x = location_config.zoom,
             align = 'top'
         )
         self.song_block = self.lay_mg.add_below(
             item = self._create_item(
                 PageTable.SONG,
                 LayoutName.SONG_BLOCK,
-                Size(SongVariable.WIDTH_BLOCK * GameVariable.ZOOM_SIZE,
-                     SongVariable.HEIGHT_BLOCK * GameVariable.ZOOM_SIZE),
+                Size(SongVariable.WIDTH_BLOCK * location_config.zoom,
+                     SongVariable.HEIGHT_BLOCK * location_config.zoom),
             ),
             target = self.song_name,
-            gap = GameVariable.ZOOM_SIZE,
+            gap = location_config.zoom,
             align = 'left'
         )
         self.song_rect = self.lay_mg.add_inner(
@@ -602,14 +608,25 @@ class LayoutCollection:
                 Position(0, 0),
             )
         )
-        self.help_panel = self.lay_mg.add_center(
-            item = self._create_item(
-                PageTable.HELP,
-                LayoutName.HELP_PANEL,
-                Size(panel_w, panel_h),
-            ),
-            gap_y = location_config.scale(-648)
-        )
+        for i, name in enumerate(LayoutName.HELP_PANEL.serial_list):
+            added_item = self.lay_mg.add_center(
+                item = self._create_item(
+                    PageTable.HELP,
+                    name,
+                    Size(panel_w, panel_h),
+                ),
+                gap_y = location_config.scale(-648)
+            )
+            if i == 0:
+                self.help_panel = added_item
+        # self.help_panel = self.lay_mg.add_center(
+        #     item = self._create_item(
+        #         PageTable.HELP,
+        #         LayoutName.HELP_PANEL,
+        #         Size(panel_w, panel_h),
+        #     ),
+        #     gap_y = location_config.scale(-648)
+        # )
         self.help_lace = self.lay_mg.add_center(
             item = self._create_item(
                 PageTable.HELP,

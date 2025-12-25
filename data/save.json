@@ -1,10 +1,10 @@
 {
     "SONG": {
         "select_song": [
-            10
+            0
         ],
         "volume": [
-            2
+            7
         ]
     },
     "RANK": [
