@@ -11,8 +11,8 @@ from core.page.base import page_mg
 from core.page.navigation import BasePageNavigation
 from core.page.tree_path import tree_path_table
 from core.page.variable import HelpConfig, RankConfig
-from core.screen.base import screen_mg
 from core.screen.drawing import draw_mg
+from core.screen.manager import screen_mg
 from core.tetris_game.main import (TetrisCore, clock_game, individual_tetris,
                                    main_tetris_game)
 from core.tetris_game.manager import player1, player2

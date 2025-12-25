@@ -2,8 +2,8 @@ import pygame
 from core.debug import dbg
 from core.font.font_manager import fonts_mg
 from core.location_layout.main import layout_mg
-from core.screen.base import ScreenManager, screen_mg
 from core.screen.drawing import draw_mg
+from core.screen.manager import ScreenManager, screen_mg
 
 
 def main_screen():

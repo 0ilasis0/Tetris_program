@@ -1,7 +1,7 @@
 from core.debug import dbg
 from core.hmi.grid import GridManager
 from core.page.variable import GridParameter, GridThing, NavigationHandle
-from core.screen.base import screen_mg
+from core.screen.manager import screen_mg
 from core.tetris_game.manager import TetrisCore, player1
 from core.variable import PageTable
 
