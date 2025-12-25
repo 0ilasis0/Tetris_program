@@ -11,7 +11,8 @@ def main_screen():
     screen_mg.window.fill((0, 0, 0))
 
     # 背景/圖片更新
-    show_picture(screen_mg)
+    show_picture(True)
+    show_picture(False)
 
     # 更新繪圖draw
     draw_mg.show_draw(screen_mg.window, draw_mg.current_draw_dynamic, False)
@@ -23,22 +24,14 @@ def main_screen():
     pygame.display.flip()  # 更新整個畫面
 
 
-def show_picture(screen_mg: ScreenManager):
+def show_picture(fixed: bool):
+    target_map = screen_mg.page_images_static.get(screen_mg.current_page, {}) if fixed else screen_mg.page_images_dynaic.get(screen_mg.current_page, {})
+
     # 畫每個圖片(含背景)
-    images_static = screen_mg.page_images_static.get(screen_mg.current_page, {})
-    for name, surface in images_static.items():
+    for name, surface in target_map.items():
         layout_item = layout_mg.get_item(screen_mg.current_page, name)
         if not layout_item:
-            dbg.error(f'{layout_item} is not in {images_static}')
-            continue
-
-        screen_mg.window.blit(surface, (layout_item.pos.x, layout_item.pos.y))
-
-    images_dynaic = screen_mg.page_images_dynaic.get(screen_mg.current_page, {})
-    for name, surface in images_dynaic.items():
-        layout_item = layout_mg.get_item(screen_mg.current_page, name)
-        if not layout_item:
-            dbg.error(f'{layout_item} is not in {images_dynaic}')
+            dbg.error(f'{layout_item} is not in {target_map}')
             continue
 
         screen_mg.window.blit(surface, (layout_item.pos.x, layout_item.pos.y))
