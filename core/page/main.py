@@ -303,6 +303,7 @@ class PageBoot():
 
     def SINGLE_MENU(self):
         page_navigation.window_all_init(PageTable.SINGLE_MENU)
+        draw_mg.clear_map(PageTable.SINGLE_MENU, True)
 
         # 畫基本關卡方塊
         single_menu_rect = layout_mg.get_item(PageTable.SINGLE_MENU, LayoutName.SINGLE_MENU_RECT)
