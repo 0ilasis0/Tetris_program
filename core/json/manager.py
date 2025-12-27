@@ -1,7 +1,6 @@
 import json
 
 from core.debug import dbg
-from core.json.base import RenewJSON
 from core.json.variable import JsonConfig
 from core.variable import PageTable, PathConfig
 
@@ -167,12 +166,26 @@ class JsonManager:
             return None
 
     def build_json(self):
-        data = {}
+        """
+        建置方法：讀取 JsonConfig 中的任務清單並執行
+        """
+        if not hasattr(JsonConfig, 'build_tasks') or not JsonConfig.build_tasks:
+            dbg.log("沒有設定 build_tasks ，跳過建置流程")
+            return
 
-        file_path = PathConfig.json_single
-        RenewJSON.single_object(data)
-        self.write_json(file_path, data, mode='w', encoding = None, indent = 4)
+        dbg.log("--- 開始執行 JSON 建置流程 ---")
 
-        dbg.log(f"已生成路徑{file_path}的 JSON")
+        for file_path, builder_func in JsonConfig.build_tasks:
+            try:
+                data = {}
+
+                # 呼叫外部定義的函式來填充資料 (builder_func 就是 RenewJSON.single_object)
+                builder_func(data)
+                self.write_json(file_path, data, mode='w', encoding=None, indent=4)
+
+                dbg.log(f"已建置: {file_path}")
+
+            except Exception as e:
+                dbg.error(f"建置失敗 {file_path}: {e}")
 
 json_mg = JsonManager()
