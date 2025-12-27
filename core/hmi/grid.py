@@ -40,7 +40,7 @@ class GridManager:
     def get_cell(self, x: int, y: int) -> Cell:
         if 0 <= y < self.rows and 0 <= x < self.cols:
             return self.grid[y][x]
-        dbg.log('x y is over the range')
+        dbg.error('x y is over the range')
         return None
 
     def clear_cell(self, x: int, y: int):

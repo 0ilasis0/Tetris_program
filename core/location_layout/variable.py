@@ -65,7 +65,7 @@ class LayoutName(str, Enum):
     SINGLE_MENU_BG      = 'single_menu_bg'
     DOUBLE_BG           = 'double_bg'
     ENDLESS_BG          = 'endless_bg'
-    SONG_BG             = 'song_bg'
+    SYS_CONFIG_BG       = 'sys_config_bg'
     HELP_BG             = 'help_bg'
     RANK_BG             = 'rank_bg'
 
@@ -87,11 +87,12 @@ class LayoutName(str, Enum):
     GAME_CLOCK_SEC      = "game_clock_sec"
     GAME_KO             = "game_ko"
 
-    # SONG
-    SONG_MAIN           = 'song_main'
-    SONG_RECT           = 'song_rect'
-    SONG_NAME           = 'song_name'
-    SONG_BLOCK          = 'song_block'
+    # SYS_CONFIG
+    SYS_SONG_MAIN           = 'sys_song_main'
+    SYS_SONG_RECT           = 'sys_song_rect'
+    SYS_SONG_NAME           = 'sys_song_name'
+    SYS_SONG_BLOCK          = 'sys_song_block'
+    SYS_WINDOW_SCALE        = 'sys_window_scale'
 
     # HELP
     HELP_PANEL          = ('help_panel', 3)
@@ -110,74 +111,3 @@ class LayoutName(str, Enum):
     RANK_SEC            = 'rank_sec'
     RANK_MIN            = 'rank_min'
     RANK_FRACTION       = 'rank_fraction'
-
-
-# layout_data = {
-#     # BASE
-#     "BASE_NUMBER_BIG"     : 'base_number_big',
-
-#     # BACKGROUND
-#     "MENU_BG"             : 'menu_bg',
-#     "SINGLE_BG"           : 'single_bg',
-#     "SINGLE_MENU_BG"      : 'single_menu_bg',
-#     "DOUBLE_BG"           : 'double_bg',
-#     "ENDLESS_BG"          : 'endless_bg',
-#     "SONG_BG"             : 'song_bg',
-#     "HELP_BG"             : 'help_bg',
-#     "RANK_BG"             : 'rank_bg',
-
-#     # MENU
-#     "MENU_MAIN"           : 'menu_main',
-#     "MENU_RECT"           : 'menu_rect',
-
-#     # GAME
-#     "SINGLE_MENU_MAIN"    : 'single_menu_main',
-#     "SINGLE_MENU_RECT"    : 'single_menu_rect',
-
-#     "GAME_MAIN"           : "game_main",
-#     "GAME_SLOT"           : "game_slot",
-#     "GAME_COMBO"          : "game_combo",
-#     "GAME_SCORE"          : "game_score",
-#     "GAME_COMBO_NUMBER"   : "game_combo_number",
-#     "GAME_CLOCK"          : "game_clock",
-#     "GAME_CLOCK_MIN"      : "game_clock_min",
-#     "GAME_CLOCK_SEC"      : "game_clock_sec",
-#     "GAME_KO"             : "game_ko",
-
-#     # SONG
-#     "SONG_MAIN"           : 'song_main',
-#     "SONG_RECT"           : 'song_rect',
-#     "SONG_NAME"           : 'song_name',
-#     "SONG_BLOCK"          : 'song_block',
-
-#     # HELP
-#     "HELP_PANEL"          : 'help_panel',
-#     "HELP_LACE"           : 'help_lace',
-#     "HELP_OPTION_TITLE_SL": 'help_option_title_sl',
-#     "HELP_OPTION_TITLE_DB": 'help_option_title_db',
-#     "HELP_OPTION_TITLE_EL": 'help_option_title_el',
-#     "HELP_OPTION_DESC_SL" : 'help_option_desc_sl',
-#     "HELP_OPTION_DESC_DB" : 'help_option_desc_db',
-#     "HELP_OPTION_DESC_EL" : 'help_option_desc_el',
-
-#     # RANK
-#     "RANK_UNDERLINE"      : 'rank_underline',
-#     "RANK_FRAME"          : 'rank_frame',
-#     "RANK_RANKING"        : 'rank_ranking',
-#     "RANK_SEC"            : 'rank_sec',
-#     "RANK_MIN"            : 'rank_min',
-#     "RANK_FRACTION"       : 'rank_fraction',
-# }
-
-# 使用迴圈增加想要的連號內容
-# for level in range(0, single_object_config.level_amount):
-#     for object in range(0, single_object_config.object[f"LEVEL_{level}"]):
-#         layout_data[f"SINGLE_LEVEL{level}_OBJECT{object}"] = f"single_level{level}_object{object}"
-
-# 統一產生 Enum 類別
-# 參數：類別名稱, 資料字典, type = 繼承類型
-# LayoutName = Enum("LayoutName", layout_data, type = str)
-
-# 用來看物件名稱是否確實生成
-# import pprint
-# pprint.pprint(LayoutName)

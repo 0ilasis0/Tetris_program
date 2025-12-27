@@ -6,9 +6,9 @@ from core.location_layout.manager import LayoutNameManage
 from core.location_layout.variable import LayoutName
 from core.screen.variable import ScreenConfig
 from core.variable import PageTable, PathBase, PathConfig, Size
+from core.debug import dbg
 
-
-class ScreenManager:
+class ImgManager:
     def __init__(self):
         self.window = None
 
@@ -25,7 +25,7 @@ class ScreenManager:
 
     # ========= 視窗設定 =========
     def reload_setup(self):
-        self.window = pygame.display.set_mode((ScreenConfig.width, ScreenConfig.height))
+        self.window = pygame.display.set_mode((ScreenConfig.width, ScreenConfig.height), pygame.RESIZABLE)
         pygame.display.set_caption(ScreenConfig.title_name)
 
         # 載入 icon
@@ -38,12 +38,13 @@ class ScreenManager:
         self.add_image(PageTable.SINGLE_MENU,   LayoutName.SINGLE_MENU_BG,  PathConfig.bg1, layout_mg.get_item_size(PageTable.SINGLE_MENU, LayoutName.SINGLE_MENU_BG))
         self.add_image(PageTable.DOUBLE,        LayoutName.DOUBLE_BG,       PathConfig.bg1, layout_mg.get_item_size(PageTable.DOUBLE, LayoutName.DOUBLE_BG))
         self.add_image(PageTable.ENDLESS,       LayoutName.ENDLESS_BG,      PathConfig.bg1, layout_mg.get_item_size(PageTable.ENDLESS, LayoutName.ENDLESS_BG))
-        self.add_image(PageTable.SONG,          LayoutName.SONG_BG,         PathConfig.bg1, layout_mg.get_item_size(PageTable.SONG, LayoutName.SONG_BG))
+        self.add_image(PageTable.SYS_CONFIG,    LayoutName.SYS_CONFIG_BG,   PathConfig.bg1, layout_mg.get_item_size(PageTable.SYS_CONFIG, LayoutName.SYS_CONFIG_BG))
         self.add_image(PageTable.HELP,          LayoutName.HELP_BG,         PathConfig.bg1, layout_mg.get_item_size(PageTable.HELP, LayoutName.HELP_BG))
         self.add_image(PageTable.RANK,          LayoutName.RANK_BG,         PathConfig.bg1, layout_mg.get_item_size(PageTable.RANK, LayoutName.RANK_BG))
 
         # 載入圖片
         name = LayoutNameManage.game_suffix_key(LayoutName.GAME_CLOCK, 0)
+
         self.add_image(
             PageTable.SINGLE,
             name,
@@ -80,6 +81,18 @@ class ScreenManager:
             PathConfig.img_lace,
             layout_mg.get_item_size(PageTable.HELP, LayoutName.HELP_LACE)
         )
+
+    def show_image(self, fixed: bool):
+        target_map = self.page_images_static.get(self.current_page, {}) if fixed else self.page_images_dynaic.get(self.current_page, {})
+
+        # 畫每個圖片(含背景)
+        for name, surface in target_map.items():
+            layout_item = layout_mg.get_item(self.current_page, name)
+            if not layout_item:
+                dbg.error(f'{layout_item} is not in {target_map}')
+                continue
+
+            self.window.blit(surface, (layout_item.pos.x, layout_item.pos.y))
 
     # ========= 圖片 =========
     def add_image(
@@ -136,5 +149,4 @@ class ScreenManager:
         width, height= surface.get_size()
         return Size(width, height)
 
-
-screen_mg = ScreenManager()
+img_mg = ImgManager()

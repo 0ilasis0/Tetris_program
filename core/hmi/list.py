@@ -94,7 +94,7 @@ class BaseManager:
             keyboard_mg.hook_y = self.current_operate
             self.last_hook_x = keyboard_mg.hook_x
         else:
-            dbg.log(f'key_map have not {init_key}')
+            dbg.error(f'key_map have not {init_key}')
 
     def on_state_change(self, key: str, value: any):
         '''
@@ -145,13 +145,13 @@ class BaseManager:
             # 把舊欄位目前的 hook_x 值存回 state，這樣切回去舊欄位時可以恢復之前的值
             self.state[old_key] = keyboard_mg.hook_x
         else:
-            dbg.log('old_key is None')
+            dbg.error('old_key is None')
 
         if new_key is not None:
             # 將新欄位對應的 state 值寫回 hook_x，如果 state 裡沒有該 key，就保留 hook_x 原值
             keyboard_mg.hook_x = self.state.get(new_key, keyboard_mg.hook_x)
         else:
-            dbg.log('new_key is None')
+            dbg.error('new_key is None')
 
         # 更新目前操作索引與 last_hook_x
         self.current_operate = new_y
@@ -169,11 +169,10 @@ class BaseManager:
 
         # 將 hook_x 的新值更新到當前 state 中
         self.state[temp_key] = hook_x
-
         try:
             self.on_state_change(temp_key, hook_x)
         except Exception:
-            dbg.log('on_state_change unable to execute')
+            dbg.error('on_state_change unable to execute')
         finally:
             self._save()
             self.last_hook_x = hook_x
@@ -202,7 +201,7 @@ class BaseManager:
     def _save(self):
         ''' 只應儲存json_save寫入檔案 '''
         if not self.json_map:
-            dbg.log('json_map is no data')
+            dbg.error('json_map is no data')
             return
 
         for state_key, (catalog, json_key) in self.json_map.items():
@@ -213,8 +212,8 @@ class BaseManager:
 
     '''
     功能：
-    "SONG": {
-        "SELECT_SONG": [
+    "SYS_CONFIG": {
+        "SYS_SELECT_SONG": [
             8
         ],
         "VOLUME": [
@@ -223,10 +222,10 @@ class BaseManager:
     }
 
     將上列結構轉乘下方結構，如此一來便能只由keys指接引入路徑而不是要寫兩層
-    如：["SONG"]["VOLUME"]->['volume']
+    如：["SYS_CONFIG"]["VOLUME"]->['volume']
 
     self.json_map = {
-            "select_song": ("SONG", "SELECT_SONG"),
-            "volume": ("SONG", "VOLUME")
+            "select_song": ("SYS_CONFIG", "SYS_SELECT_SONG"),
+            "volume": ("SYS_CONFIG", "VOLUME")
         }
     '''

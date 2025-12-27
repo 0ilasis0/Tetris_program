@@ -1,38 +1,22 @@
 import pygame
-from core.debug import dbg
-from core.font.font_manager import fonts_mg
-from core.location_layout.main import layout_mg
+from core.font.manager import font_mg
 from core.screen.drawing import draw_mg
-from core.screen.manager import ScreenManager, screen_mg
+from core.screen.image import img_mg
 
 
 def main_screen():
     # 初始化畫面
-    screen_mg.window.fill((0, 0, 0))
+    img_mg.window.fill((0, 0, 0))
 
     # 背景/圖片更新
-    show_picture(True)
-    show_picture(False)
+    img_mg.show_image(True)
+    img_mg.show_image(False)
 
     # 更新繪圖draw
-    draw_mg.show_draw(screen_mg.window, draw_mg.current_draw_dynamic, False)
-    draw_mg.show_draw(screen_mg.window, draw_mg.current_draw_static, True)
+    draw_mg.show_draw(img_mg.window, draw_mg.current_draw_dynamic, False)
+    draw_mg.show_draw(img_mg.window, draw_mg.current_draw_static, True)
 
     # 文字更新
-    fonts_mg.show_texts(screen_mg.window)
+    font_mg.show_texts(img_mg.window)
 
     pygame.display.flip()  # 更新整個畫面
-
-
-def show_picture(fixed: bool):
-    target_map = screen_mg.page_images_static.get(screen_mg.current_page, {}) if fixed else screen_mg.page_images_dynaic.get(screen_mg.current_page, {})
-
-    # 畫每個圖片(含背景)
-    for name, surface in target_map.items():
-        layout_item = layout_mg.get_item(screen_mg.current_page, name)
-        if not layout_item:
-            dbg.error(f'{layout_item} is not in {target_map}')
-            continue
-
-        screen_mg.window.blit(surface, (layout_item.pos.x, layout_item.pos.y))
-

@@ -1,26 +1,30 @@
 '''只有在更新/特殊情況需要用到，一班正常遊玩時請關掉-------------------------'''
+# .dll更新並生成，若是無更新請關掉以免消耗資源
+# from core.compile_dll import CompileAndLoadDll
+# CompileAndLoadDll()
+
 # .JSON的生成
 # from core.json.variable import JsonConfig
+
 # JsonConfig.build_enable = True
 '''只有在更新/特殊情況需要用到，一班正常遊玩時請關掉-------------------------'''
-
 import pprint
 
 import pygame
 from core.base import Stack
-from core.font.rendering import rendering
-from core.hmi.song import song_mg
+from core.font.rendering import rendering_reload_setup
+from core.hmi.config.main import sys_config_mg
 from core.json.manager import json_mg
 from core.keyboard.base import keyboard_mg
 from core.page.base import page_mg
 from core.page.main import page_boot, page_navigation
 from core.page.tree_path import genealogy_table, tree_path_table
-from core.screen.main import screen_mg
+from core.page.variable import RankConfig
+from core.screen.main import img_mg
 from core.tetris_game.manager import player1, player2
 from core.variable import PageTable
 
 page_maps = {page: getattr(page_navigation, page.name) for page in PageTable}
-
 #
 # 初始化set
 #
@@ -28,14 +32,7 @@ page_maps = {page: getattr(page_navigation, page.name) for page in PageTable}
 pygame.init()
 
 ''' screen '''
-screen_mg.reload_setup()
-
-''' keyboard '''
-keyboard_mg.setup(
-    current_keyboard = PageTable.MENU,
-    player1 = player1,
-    player2 = player2,
-    )
+img_mg.reload_setup()
 
 ''' page '''
 #註冊 Callback
@@ -52,9 +49,19 @@ page_mg.setup(
     current_page = PageTable.MENU
 )
 
+RankConfig.reload_setup()
+
 ''' song '''
 pygame.mixer.init()
-song_mg.setup()
+sys_config_mg.setup()
+
+''' keyboard '''
+keyboard_mg.setup(
+    sys_config_mg,
+    current_keyboard = PageTable.MENU,
+    player1 = player1,
+    player2 = player2
+)
 
 
 
@@ -62,7 +69,7 @@ song_mg.setup()
 # other
 #
 ''' font '''
-rendering()
+rendering_reload_setup()
 # 如果找 read_list_json 直接去 json_manager __init__進行設定
 
 ''' page '''

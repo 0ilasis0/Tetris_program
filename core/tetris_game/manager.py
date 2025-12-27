@@ -1,7 +1,7 @@
 from core.tetris_game.attack.base import Attack
 from core.tetris_game.base import Field, TetrisRenderer, Tetromino
 from core.tetris_game.level.manager import LevelManager
-from core.tetris_game.variable import GameState, GameVariable
+from core.tetris_game.variable import GameState, GameVar
 
 
 class StoreSlot:
@@ -45,8 +45,8 @@ class TetrisCore:
     def __init__(
             self,
             suffix_index,
-            width_block = GameVariable.WIDTH_BLOCK,
-            height_block = GameVariable.HEIGHT_BLOCK
+            width_block = GameVar.WIDTH_BLOCK,
+            height_block = GameVar.HEIGHT_BLOCK
         ):
         # 目前玩家為誰
         self.suffix_index = suffix_index
@@ -64,8 +64,8 @@ class TetrisCore:
             grid = self.field.grid,
             width_block = width_block,
             height_block = height_block,
-            zoom = self.field.zoom
         )
+
         # 難度等級(LevelSystem管理)
         self.level_mg = LevelManager()
 
@@ -80,7 +80,7 @@ class TetrisCore:
         self.score = 0
         self.combo = 0
         self.drop_timer = 0
-        self.drop_clock = GameVariable.DROP_CLOCK
+        self.drop_clock = GameVar.DROP_CLOCK
         # 遊戲狀態
         self.state = GameState.STATE_START
 
@@ -98,7 +98,7 @@ class TetrisCore:
             # KO 結算
             self.attack_mg.check_ko(self.field)
             # 遊戲 結算
-            if self.attack_mg.ko_counter >= GameVariable.MAX_KO_COUNT:
+            if self.attack_mg.ko_counter >= GameVar.MAX_KO_COUNT:
                 self.state = GameState.STATE_GAMEOVER
 
     def freeze(self):
@@ -154,14 +154,14 @@ class TetrisCore:
         self.current_tetromino.rotate()
 
         # 嘗試最多往右移 4 次（因為 tetromino 寬度最大為 4）
-        for _ in range(GameVariable.CELL_BLOCK):
+        for _ in range(GameVar.CELL_BLOCK):
             if not self.field.check_collision(self.current_tetromino):
                 break  # 無碰撞就結束
             # 如果碰到左邊界，右移
             if self.current_tetromino.x < 0:
                 self.current_tetromino.x += 1
             # 如果碰到右邊界，左移
-            elif self.current_tetromino.x + GameVariable.CELL_BLOCK > self.field.width_block:
+            elif self.current_tetromino.x + GameVar.CELL_BLOCK > self.field.width_block:
                 self.current_tetromino.x -= 1
             else:
                 # 碰撞到其他方塊，還原旋轉與位置
@@ -249,7 +249,7 @@ class TetrisCore:
         # 重置grid格子
         for y in range(self.field.height_block):
             for x in range(self.field.width_block):
-                self.field.grid[y][x] = GameVariable.EMPTY_COLOR
+                self.field.grid[y][x] = GameVar.EMPTY_COLOR
 
         # 攻擊模組初始化
         if attack_sw:

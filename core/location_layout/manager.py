@@ -83,9 +83,11 @@ class LayoutManager:
             self,
             item: LayoutItem,
             target,
-            gap = location_config.y_gap,
+            gap = None,
             align = 'left'
         ):
+        gap = gap if gap is not None else location_config.y_gap
+
         '''
         垂直堆疊
         parameter: left center right
@@ -190,7 +192,14 @@ class LayoutManager:
         item.pos = Position(round(x + gap_x), round(y + gap_y))
         return self.add_item(item)
 
-    def get_item_pos(self, category, name = None, index = None, extra_x = 0, extra_y = 0):
+    def get_item_pos(
+            self,
+            category,
+            name = None,
+            index = None,
+            extra_x = 0,
+            extra_y = 0
+        ):
         """
         透過 category + name 取得 item 的 (x, y) 座標
         如果不存在，回傳 None

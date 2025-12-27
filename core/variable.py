@@ -4,6 +4,7 @@ from enum import Enum
 from pathlib import Path
 
 
+# 不可任意修改Size
 @dataclass(frozen = True)
 class Size:
     width: int
@@ -95,17 +96,6 @@ colors = [
 
 
 #
-# JSON檔案內路徑
-#
-class JsonPath(Enum):
-    # SONG
-    SONG = 'SONG'
-    VOLUME = 'volume'
-    SELECT_SONG = 'select_song'
-
-
-
-#
 # 目錄標籤
 #
 class PageTable(Enum):
@@ -115,7 +105,19 @@ class PageTable(Enum):
     SINGLE_MENU = 'SINGLE_MENU'
     DOUBLE      = 'DOUBLE'
     ENDLESS     = 'ENDLESS'
-    SONG        = 'SONG'
+    SYS_CONFIG  = 'SYS_CONFIG'
     HELP        = 'HELP'
     RANK        = 'RANK'
     EXIT        = 'EXIT'
+
+
+#
+# JSON檔案內名稱( 注意改了這裡JSON內部名稱也要改 )
+#
+@dataclass(frozen = True)
+class JsonPath(Enum):
+    # SYS_CONFIG
+    SYS_CONFIG          = "SYS_CONFIG"
+    SYS_VOLUME          = 'sys_volume'
+    SYS_SELECT_SONG     = 'sys_select_song'
+    SYS_WINDOW_SCALE    = "sys_window_scale"

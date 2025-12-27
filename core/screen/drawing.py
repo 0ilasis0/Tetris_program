@@ -9,6 +9,22 @@ class DrawManager():
         self.current_draw_static = []       # 靜態畫布
         self.current_draw_dynamic = []      # 動態畫布
 
+    def show_draw(self, screen, page_tables, fixed):
+        target_map = self.draw_static_maps if fixed else self.draw_dynamic_maps
+
+        if not isinstance(page_tables, list):
+            page_tables = [page_tables]
+
+        for category in page_tables:
+            if category not in target_map:
+                continue
+            for form in target_map[category]:
+                if form["shape"] == "rect":
+                    rect = pygame.Rect(form["place_x"], form["place_y"], form["size_x"], form["size_y"])
+                    pygame.draw.rect(screen, form["color"], rect, form["hollow"])
+                elif form["shape"] == "circle":
+                    pygame.draw.circle(screen, form["color"], (form["place_x"], form["place_y"]), form["size_x"], form["hollow"])
+
     def add_form(
             self,
             category,
@@ -19,7 +35,7 @@ class DrawManager():
             color,
             hollow = 1,
             fixed = True,
-            ):
+        ):
         '''
         pos 為x0 y0 座標
         size 為 width height 長寬
@@ -40,29 +56,13 @@ class DrawManager():
             "hollow": hollow
         })
 
-    def show_draw(self, screen, page_tables, fixed):
-        target_map = self.draw_static_maps if fixed else self.draw_dynamic_maps
-
-        if not isinstance(page_tables, list):
-            page_tables = [page_tables]
-
-        for category in page_tables:
-            if category not in target_map:
-                continue
-            for form in target_map[category]:
-                if form["shape"] == "rect":
-                    rect = pygame.Rect(form["place_x"], form["place_y"], form["size_x"], form["size_y"])
-                    pygame.draw.rect(screen, form["color"], rect, form["hollow"])
-                elif form["shape"] == "circle":
-                    pygame.draw.circle(screen, form["color"], (form["place_x"], form["place_y"]), form["size_x"], form["hollow"])
-
-    def maps_clear(self, category, fixed = False):
-        """清除某頁的某類型畫布"""
+    def clear_map(self, category, fixed = False):
+        """ 清除某頁的某頁畫布 """
         target_map = self.draw_static_maps if fixed else self.draw_dynamic_maps
         target_map[category] = []
 
-    def current_clear(self):
-        '''clear 畫布'''
+    def clear_current(self):
+        ''' 清除全部畫布指向位置 '''
         self.current_draw_dynamic = []
         self.current_draw_static = []
 

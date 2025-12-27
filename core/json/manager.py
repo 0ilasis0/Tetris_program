@@ -163,15 +163,15 @@ class JsonManager:
                 data = data[key]
             return data
         except (KeyError, TypeError):
-            dbg.error(KeyError, TypeError)
+            dbg.error(f"keys:{keys} or key:{key} is error")
             return None
 
     def build_json(self):
         data = {}
 
-        # file_path = PathConfig.json_single
-        # RenewJSON.single_object(data)
-        # self.write_json(file_path, data, mode='w', encoding = None, indent = 4)
+        file_path = PathConfig.json_single
+        RenewJSON.single_object(data)
+        self.write_json(file_path, data, mode='w', encoding = None, indent = 4)
 
         dbg.log(f"已生成路徑{file_path}的 JSON")
 

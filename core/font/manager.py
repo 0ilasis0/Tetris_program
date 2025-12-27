@@ -1,10 +1,10 @@
 import pygame
 from core.debug import dbg
 from core.location_layout.variable import location_config
-from core.variable import PathConfig, Position
+from core.variable import PathConfig
 
 
-class FontsManager:
+class FontManager:
     def __init__(self):
         """
         初始化 FontsManager
@@ -61,8 +61,8 @@ class FontsManager:
             category,
             index,
             pos,
-            y_gap = location_config.y_gap,
-            x_gap = location_config.word,
+            y_gap = None,
+            x_gap = None,
             fixed = True,
             alpha_pec = 100,
             direction = "vertical"
@@ -73,13 +73,16 @@ class FontsManager:
         - alpha_pec: 透明度百分比 0~100
         - direction: 排列方向("vertical" 或 "horizontal")
         """
+        y_gap = y_gap if y_gap is not None else location_config.y_gap
+        x_gap = x_gap if x_gap is not None else location_config.word
+
         if category not in self.font_map:
-            dbg.log(f"{category} is not building in font_map")
+            dbg.error(f"{category} is not building in font_map")
             return
 
         font_list = self.font_map[category]
         if not (0 <= index < len(font_list)):
-            dbg.log(f"{category}[{index}] out of range")
+            dbg.error(f"{category}[{index}] out of range")
             return
 
         font_lines = font_list[index]["lines"]
@@ -129,7 +132,7 @@ class FontsManager:
             "raw_text": lines[start_line:end_line]  # 原始文字(用來debug)
         })
 
-    def current_clear(self, static = True, dynamic = True):
+    def clear_current(self, static = True, dynamic = True):
         """
         清空目前動態字元
         """
@@ -137,6 +140,9 @@ class FontsManager:
             self.static_text = []
         if dynamic:
             self.dynamic_text = []
+
+    def clear_map(self):
+        self.font_map = {}
 
     def _get_font(self, font, size):
         """
@@ -161,7 +167,7 @@ class FontsManager:
             end = length
 
         if end < start:
-            dbg.log("end_line < start_line")
+            dbg.error("end_line < start_line")
             return -1, -1
 
         start   = max(0, start)
@@ -169,4 +175,4 @@ class FontsManager:
 
         return start, end
 
-fonts_mg = FontsManager()
+font_mg = FontManager()

@@ -98,6 +98,8 @@ class CentralManager:
         self.running = True
         self.debug_mode = True
 
+        self.sys_window_scale_pending = None
+
     # 全局退出遊戲
     def leave_game(self, event):
         if event.type == pygame.QUIT:

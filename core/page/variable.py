@@ -41,18 +41,20 @@ class HelpConfig:
         [20, 20, 100],
     ]
 
-rank_underline = layout_mg.get_item_size(PageTable.RANK, LayoutName.RANK_UNDERLINE)
 class RankConfig:
-    player_score_pos = rank_underline.width // 30 * (-1)
+    @classmethod
+    def reload_setup(cls):
+        cls.rank_underline = layout_mg.get_item_size(PageTable.RANK, LayoutName.RANK_UNDERLINE)
+        cls.player_score_pos = cls.rank_underline.width // 30 * (-1)
 
-    extra_pos = {
-        0: (0, 0),
-        1: (rank_underline.width * 12 // 44, rank_underline.height * 19 // 49),
-        2: (rank_underline.width * 26 // 46, rank_underline.height * 21 // 26),
-    }
+        cls.extra_pos = {
+            0: (0, 0),
+            1: (cls.rank_underline.width * 12 // 44, cls.rank_underline.height * 19 // 49),
+            2: (cls.rank_underline.width * 26 // 46, cls.rank_underline.height * 21 // 26),
+        }
 
-    extra_pos_player = {
-        0: (extra_pos[0][0] + rank_underline.width // 20 * (-1), extra_pos[0][1] + rank_underline.height // 40),
-        1: (extra_pos[1][0] + rank_underline.width // 20 * (-1), extra_pos[1][1] + rank_underline.height // 40),
-        2: (extra_pos[2][0] + rank_underline.width // 20 * (-1), extra_pos[2][1] + rank_underline.height // 40),
-    }
+        cls.extra_pos_player = {
+            0: (cls.extra_pos[0][0] + cls.rank_underline.width // 20 * (-1), cls.extra_pos[0][1] + cls.rank_underline.height // 40),
+            1: (cls.extra_pos[1][0] + cls.rank_underline.width // 20 * (-1), cls.extra_pos[1][1] + cls.rank_underline.height // 40),
+            2: (cls.extra_pos[2][0] + cls.rank_underline.width // 20 * (-1), cls.extra_pos[2][1] + cls.rank_underline.height // 40),
+        }

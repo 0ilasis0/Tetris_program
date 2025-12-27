@@ -2,7 +2,7 @@ import random
 
 from core.debug import dbg
 from core.tetris_game.base import Field, Tetromino
-from core.tetris_game.variable import GameVariable
+from core.tetris_game.variable import GameVar
 
 
 class Attack:
@@ -28,16 +28,16 @@ class Attack:
                 return self.ko_counter, False  # 玩家被 KO
 
             # 準備要新增的垃圾列
-            new_row = [GameVariable.RAISE_COLOR] * player.field.width_block
+            new_row = [GameVar.RAISE_COLOR] * player.field.width_block
             mine_position = random.randint(0, player.field.width_block - 1)
-            new_row[mine_position] = GameVariable.MINE_COLOR
+            new_row[mine_position] = GameVar.MINE_COLOR
 
             # 檢查是否會撞擊玩家當前方塊
             if self.check_raise_collision(player.field, player.current_tetromino):
                 try:
                     player.freeze()
                 except Exception as e:
-                    dbg.log(f"raise_bottom: freeze error {e}")
+                    dbg.error(f"raise_bottom: freeze error {e}")
 
             # --- 安全地上升一行 ---
             player.field.grid.pop(0)
@@ -54,9 +54,9 @@ class Attack:
         bottom_cells = {}
 
         # 找出每個 x 的最底格
-        for i in range(GameVariable.CELL_BLOCK):
-            for j in range(GameVariable.CELL_BLOCK):
-                idx = i * GameVariable.CELL_BLOCK + j
+        for i in range(GameVar.CELL_BLOCK):
+            for j in range(GameVar.CELL_BLOCK):
+                idx = i * GameVar.CELL_BLOCK + j
                 if idx in shape:
                     x = int(tetromino.x + j)
                     y = int(tetromino.y + i)
@@ -67,7 +67,7 @@ class Attack:
             if y >= field.height_block - 1:
                 return True
             # 下方一格是垃圾列 → 撞擊
-            if field.grid[y + 1][x] in (GameVariable.RAISE_COLOR, GameVariable.MINE_COLOR):
+            if field.grid[y + 1][x] in (GameVar.RAISE_COLOR, GameVar.MINE_COLOR):
                 return True
 
         return False
@@ -79,11 +79,11 @@ class Attack:
         """
         top_row = field.grid[0]
 
-        if any(cell != GameVariable.EMPTY_COLOR for cell in top_row):
+        if any(cell != GameVar.EMPTY_COLOR for cell in top_row):
             self.ko_counter += 1
             # 消除 RAISE_COLOR 方塊並讓剩餘方塊沉底
             field.grid = self.collapse_raise(field)
-            if self.ko_counter >= GameVariable.MAX_KO_COUNT:
+            if self.ko_counter >= GameVar.MAX_KO_COUNT:
                 return False  # 玩家被 KO
         return True
 
@@ -97,12 +97,12 @@ class Attack:
 
             # 確認沒有超出邊界
             if 0 <= next_y < field.height_block and 0 <= x < field.width_block:
-                if field.grid[next_y][x] == GameVariable.MINE_COLOR:
+                if field.grid[next_y][x] == GameVar.MINE_COLOR:
                     triggered = True
 
                     # 引爆效果：消掉該行 + 補空行
                     field.grid.pop(next_y)
-                    field.grid.insert(0, [GameVariable.EMPTY_COLOR] * field.width_block)
+                    field.grid.insert(0, [GameVar.EMPTY_COLOR] * field.width_block)
                     break
         return triggered
 
@@ -111,7 +111,7 @@ class Attack:
         將場地中所有 RAISE_COLOR 和 MINE_COLOR 方塊消除，
         剩餘方塊沉到底部，空格補到上方，左右位置保持不變
         """
-        new_grid = [[GameVariable.EMPTY_COLOR]*field.width_block for _ in range(field.height_block)]
+        new_grid = [[GameVar.EMPTY_COLOR]*field.width_block for _ in range(field.height_block)]
         # 從底部開始放
         target_row = field.height_block - 1
 
@@ -119,12 +119,12 @@ class Attack:
         for row in reversed(field.grid):
             filtered_row = []
             for cell in row:
-                if cell in (GameVariable.RAISE_COLOR, GameVariable.MINE_COLOR):
-                    filtered_row.append(GameVariable.EMPTY_COLOR)
+                if cell in (GameVar.RAISE_COLOR, GameVar.MINE_COLOR):
+                    filtered_row.append(GameVar.EMPTY_COLOR)
                 else:
                     filtered_row.append(cell)
             # 如果這行有方塊，就放到 target_row
-            if any(cell != GameVariable.EMPTY_COLOR for cell in filtered_row):
+            if any(cell != GameVar.EMPTY_COLOR for cell in filtered_row):
                 new_grid[target_row] = filtered_row
                 target_row -= 1  # 往上移一行準備下一次放
 

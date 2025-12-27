@@ -1,3 +1,6 @@
+from core.variable import PageTable
+
+
 class PageManager:
     def __init__(self):
         self.history_stack = None
@@ -5,7 +8,7 @@ class PageManager:
         self.page_map = {}
         self.keymaps = {}
         self.current_page = None
-        self.current_boot = None
+        self.current_boot = PageTable.MENU
         self.callbacks = {}
 
     def setup (self, stack, keymaps, page_map, current_page):

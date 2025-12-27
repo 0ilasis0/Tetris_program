@@ -12,7 +12,7 @@ class Debug:
     def __init__(self, enable = True):
         self.enable = enable   # 可以隨時關閉/開啟 debug 輸出
 
-    def _get_frameinfo(self, frame = None):
+    def _get_frameinfo(self, frame=None):
         """取得呼叫來源資訊"""
         if frame is None:
             frame = inspect.currentframe().f_back
@@ -39,10 +39,9 @@ class Debug:
 
     def error(self, *args):
         """紅色錯誤訊息"""
-        if self.enable:
-            info, filename = self._get_frameinfo(inspect.currentframe().f_back)
-            time = datetime.datetime.now().strftime("%H:%M:%S")
-            print(f"\033[91m[ERROR {time} {filename}:{info.lineno} {info.function}()]\033[0m", *args)
+        info, filename = self._get_frameinfo(inspect.currentframe().f_back)
+        time = datetime.datetime.now().strftime("%H:%M:%S")
+        print(f"\033[91m[ERROR {time} {filename}:{info.lineno} {info.function}()]\033[0m", *args)
 
     def toggle(self):
         """切換 debug 狀態"""

@@ -1,5 +1,4 @@
 import pygame
-
 from core.base import central_mg
 from core.debug import dbg
 from core.keyboard.base import keyboard_mg

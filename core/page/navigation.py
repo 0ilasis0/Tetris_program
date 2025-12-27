@@ -1,7 +1,7 @@
 from core.debug import dbg
 from core.hmi.grid import GridManager
 from core.page.variable import GridParameter, GridThing, NavigationHandle
-from core.screen.manager import screen_mg
+from core.screen.image import img_mg
 from core.tetris_game.manager import TetrisCore, player1
 from core.variable import PageTable
 
@@ -12,9 +12,9 @@ class ToolPageNavigation:
         self.draw_mg = draw_mg
         self.fonts_mg = fonts_mg
 
-    def hook_clear(self, current_table, next_table):
+    def clear_hook(self, current_table, next_table):
         if next_table != current_table:
-            self.keyboard_mg.local_clear()
+            self.keyboard_mg.clear_local()
 
     def window_all_init(
             self,
@@ -26,11 +26,11 @@ class ToolPageNavigation:
             img_static: bool = False
         ):
         if draw_sw:
-            self.draw_mg.current_clear()
+            self.draw_mg.clear_current()
         if img_static or img_dynaic:
-            screen_mg.clear_images(page_table, img_static, img_dynaic)
+            img_mg.clear_images(page_table, img_static, img_dynaic)
         if fonts_static or font_dynaic:
-            self.fonts_mg.current_clear(fonts_static, font_dynaic)
+            self.fonts_mg.clear_current(fonts_static, font_dynaic)
 
 
 
@@ -85,7 +85,7 @@ class BasePageNavigation(ToolPageNavigation):
     def switch_page(self, current_table, change_table):
         ''' 用於切換程式中當前的頁面（或分頁） '''
         # 刷新下一個背景
-        screen_mg.switch_page(change_table)
+        img_mg.switch_page(change_table)
         # 決定要進入的下一個 current_page 分頁
         self.page_mg.current_page = change_table
         # 決定要進入的下一個 current_keyboard
@@ -93,7 +93,7 @@ class BasePageNavigation(ToolPageNavigation):
         # 決定下一個誰要載入初始畫面
         self.page_mg.current_boot = change_table
         # 如果換頁面則初始化hook
-        self.hook_clear(current_table, self.page_mg.current_page)
+        self.clear_hook(current_table, self.page_mg.current_page)
 
     def base_common(self, catalog):
         # 決定是否進入或退出下一分頁

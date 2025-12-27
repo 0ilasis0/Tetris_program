@@ -1,15 +1,14 @@
 import random
 
-from core.tetris_game.variable import GameVariable, figures
 from core.location_layout.variable import location_config
-location_config
+from core.tetris_game.variable import GameVar, figures
 from core.variable import Position, Size
 
 
 class Tetromino:
     def __init__(
             self,
-            x = GameVariable.WIDTH_BLOCK // 2 - GameVariable.CELL_BLOCK + 1,
+            x = GameVar.WIDTH_BLOCK // 2 - GameVar.CELL_BLOCK + 1,
             y = 0,
             type_name   = None,
             color       = None,
@@ -37,8 +36,8 @@ class Tetromino:
         輸出: (x, y) -> 在場地中的座標
         """
         grid_idx = self.get_shape()[idx]   # 0~15 (4x4)
-        offset_x = grid_idx % GameVariable.CELL_BLOCK            # 橫向偏移
-        offset_y = grid_idx // GameVariable.CELL_BLOCK           # 縱向偏移
+        offset_x = grid_idx % GameVar.CELL_BLOCK            # 橫向偏移
+        offset_y = grid_idx // GameVar.CELL_BLOCK           # 縱向偏移
         return (self.x + offset_x, self.y + offset_y)
 
     def get_shape(self):
@@ -50,12 +49,12 @@ class Tetromino:
         if tetromino_cell is None: return [[None]]
 
         # 建立一個 None 組成的矩陣
-        matrix = [[None for _ in range(GameVariable.CELL_BLOCK)] for _ in range(GameVariable.CELL_BLOCK)]
+        matrix = [[None for _ in range(GameVar.CELL_BLOCK)] for _ in range(GameVar.CELL_BLOCK)]
         shape = tetromino_cell.get_shape()
         color = tetromino_cell.color
         for idx in shape:
-            row = idx // GameVariable.CELL_BLOCK
-            col = idx % GameVariable.CELL_BLOCK
+            row = idx // GameVar.CELL_BLOCK
+            col = idx % GameVar.CELL_BLOCK
             matrix[row][col] = color
         return matrix
 
@@ -76,29 +75,25 @@ class Field:
             self,
             width_block,
             height_block,
-            zoom = location_config.zoom
         ):
         self.width_block = width_block
         self.height_block = height_block
-        self.grid = [[GameVariable.EMPTY_COLOR for _ in range(width_block)] for _ in range(height_block)]
-
-        # 顯示用位置與方塊單位大小
-        self.zoom = zoom
+        self.grid = [[GameVar.EMPTY_COLOR for _ in range(width_block)] for _ in range(height_block)]
 
     def check_collision(self, tetromino: Tetromino, dx = 0, dy = 0):
         """
         檢查 tetromino 移動 dx/dy 後是否碰撞，不修改 grid
         return:True(碰撞)/False(沒問題)
         """
-        for i in range(GameVariable.CELL_BLOCK):
-            for j in range(GameVariable.CELL_BLOCK):
-                idx = i * GameVariable.CELL_BLOCK + j
+        for i in range(GameVar.CELL_BLOCK):
+            for j in range(GameVar.CELL_BLOCK):
+                idx = i * GameVar.CELL_BLOCK + j
                 if idx in tetromino.get_shape():
                     x = int(tetromino.x + j + dx)
                     y = int(tetromino.y + i + dy)
                     if x < 0 or x >= self.width_block or y >= self.height_block:
                         return True
-                    if y >= 0 and self.grid[y][x] != GameVariable.EMPTY_COLOR:
+                    if y >= 0 and self.grid[y][x] != GameVar.EMPTY_COLOR:
                         return True
         return False
 
@@ -106,16 +101,16 @@ class Field:
         '''
         把 tetromino 固定到 grid 上
         '''
-        for i in range(GameVariable.CELL_BLOCK):
-            for j in range(GameVariable.CELL_BLOCK):
-                idx = i * GameVariable.CELL_BLOCK + j
+        for i in range(GameVar.CELL_BLOCK):
+            for j in range(GameVar.CELL_BLOCK):
+                idx = i * GameVar.CELL_BLOCK + j
                 if idx in tetromino.get_shape():
                     x = tetromino.x + j
                     y = tetromino.y + i
                     if 0 <= x < self.width_block and 0 <= y < self.height_block:
                         self.grid[y][x] = tetromino.color
 
-    def clear_lines(self, empty_color = GameVariable.EMPTY_COLOR, mine_color = GameVariable.MINE_COLOR):
+    def clear_lines(self, empty_color = GameVar.EMPTY_COLOR, mine_color = GameVar.MINE_COLOR):
         """
         檢查是否需要消行
         如果要則消除整行並補空行在最上面0的位置
@@ -145,11 +140,10 @@ class Field:
 
 
 class TetrisRenderer:
-    def __init__(self, grid, width_block, height_block, zoom) -> None:
+    def __init__(self, grid, width_block, height_block) -> None:
         self.grid           = grid
         self.width_block    = width_block
         self.height_block   = height_block
-        self.zoom           = zoom
 
     def draw_grid(
             self,
@@ -167,9 +161,9 @@ class TetrisRenderer:
                 category = category,
                 name = f"vline_{x}",
                 shape = "rect",
-                pos = Position(pos.x + x * self.zoom, pos.y),
-                size = Size(1, height_block * self.zoom),
-                color = GameVariable.GRID_COLOR,
+                pos = Position(pos.x + x * location_config.zoom, pos.y),
+                size = Size(1, height_block * location_config.zoom),
+                color = GameVar.GRID_COLOR,
                 hollow = 0,
                 fixed = fixed
             )
@@ -179,9 +173,9 @@ class TetrisRenderer:
                 category = category,
                 name = f"hline_{y}",
                 shape = "rect",
-                pos = Position(pos.x, pos.y + y * self.zoom),
-                size = Size(width_block * self.zoom, 1),
-                color = GameVariable.GRID_COLOR,
+                pos = Position(pos.x, pos.y + y * location_config.zoom),
+                size = Size(width_block * location_config.zoom, 1),
+                color = GameVar.GRID_COLOR,
                 hollow = 0,
                 fixed = fixed
             )
@@ -202,9 +196,9 @@ class TetrisRenderer:
                     category = category,
                     name = f"{category}_cell_{x}_{y}",
                     shape = "rect",
-                    pos = Position(pos.x + x * self.zoom + other_x, pos.y + y * self.zoom + other_y),
-                    size = Size(self.zoom, self.zoom),
-                    color = self.grid[y][x] if 0<=y<self.height_block and 0<=x<self.width_block else GameVariable.EMPTY_COLOR,
+                    pos = Position(pos.x + x * location_config.zoom + other_x, pos.y + y * location_config.zoom + other_y),
+                    size = Size(location_config.zoom, location_config.zoom),
+                    color = self.grid[y][x] if 0<=y<self.height_block and 0<=x<self.width_block else GameVar.EMPTY_COLOR,
                     hollow = 0,
                     fixed = fixed
                 )
@@ -218,8 +212,8 @@ class TetrisRenderer:
                         category = category,
                         name = f"{category}_cell_{x}_{y}",
                         shape = "rect",
-                        pos = Position(pos.x + x * self.zoom + other_x, pos.y + y * self.zoom + other_y),
-                        size = Size(self.zoom, self.zoom),
+                        pos = Position(pos.x + x * location_config.zoom + other_x, pos.y + y * location_config.zoom + other_y),
+                        size = Size(location_config.zoom, location_config.zoom),
                         color = color,
                         hollow = 0,
                         fixed = fixed

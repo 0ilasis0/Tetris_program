@@ -13,34 +13,37 @@ class LayoutItem:
     name: str           # 唯一名稱
     size: Size
     pos: Position = field(default_factory = Position.zero)
-    other = None
+    other: list = None
 
 
 class LayoutConfig():
     def __init__(self) -> None:
+        self.reload_setup()
+
+    def reload_setup(self):
         """ 讀取來源資料 """
         # Menu
         menu_lines = json_mg.get_data('list', PageTable.MENU)
-        self.menu_main_size = self._measure_text(content = menu_lines, shrink_map={'!':0.5})
+        self.menu_main_size = self._measure_text(content = menu_lines, shrink_map = {'!':0.5})
 
         # GAME
         self.game_score_size = self._measure_text(RenderingWord.SCORE.value, location_config.word_mini, location_config.word_mini)
         self.game_combo_size = self._measure_text(RenderingWord.COMBO.value)
         self.game_ko_size    = self._measure_text(RenderingWord.KO.value, location_config.word_mini, location_config.word_mini)
 
-        # SONG
-        song_lines = json_mg.get_data('list', PageTable.SONG)
+        # SYS_CONFIG
+        song_lines = json_mg.get_data('list', PageTable.SYS_CONFIG)
         self.song_main_size = self._measure_text(content = song_lines)
+        self.window_scale_size = self._measure_text(RenderingWord.WINDOW_SCALE_NUMBER.value)
 
         # HELP
         self.help_option_sizes = {}
         for mode in [PageTable.SINGLE.value, PageTable.DOUBLE.value, PageTable.ENDLESS.value]:
             title = json_mg.get_data('dict', PageTable.HELP.value, mode, 'title')
             description = json_mg.get_data('dict', PageTable.HELP.value, mode, 'description')
-
             self.help_option_sizes[mode] = {
-                "title": self._measure_text(content=title),
-                "description": self._measure_text(content=description)
+                "title": self._measure_text(content = title),
+                "description": self._measure_text(content = description)
             }
 
         # RANK
@@ -57,8 +60,8 @@ class LayoutConfig():
     @staticmethod
     def _measure_text(
             content,
-            line_height = location_config.word,
-            word_width = location_config.word,
+            line_height = None,
+            word_width = None,
             shrink_map = None,
             direction = "vertical"
         ):
@@ -70,13 +73,16 @@ class LayoutConfig():
         - shrink_map: 特殊字元縮放比例
         - direction: vertical 或 horizontal
         '''
+        line_height = line_height if line_height is not None else location_config.word
+        word_width = word_width if word_width is not None else location_config.word
+
         # 如果是 list，轉成單個字串並用換行分行
         if isinstance(content, list):
             lines = content
         elif isinstance(content, str):
             lines = content.split("\n")
         else:
-            dbg.log(f"_measure_text: content type {type(content)} not supported")
+            dbg.error(f"_measure_text: content type {type(content)} not supported")
             return Size(0,0)
 
         if direction == "vertical":

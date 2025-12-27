@@ -1,9 +1,9 @@
-from core.hmi.song import SongVariable
+from core.hmi.config.variable import ConfigSongVar
 from core.location_layout.base import LayoutItem, layout_config
 from core.location_layout.manager import LayoutManager, LayoutNameManage
 from core.location_layout.variable import LayoutName, location_config
 from core.screen.variable import ScreenConfig
-from core.tetris_game.variable import GameVariable
+from core.tetris_game.variable import GameVar
 from core.variable import PageTable, Position, Size
 
 
@@ -34,6 +34,19 @@ class LayoutCollection:
             size = size,
             pos = pos or Position(0, 0)
         )
+
+    def _process_recursive_layout(self, container):
+        '''
+        鑽進一層又一層的dict結構裡，把所有找到的 LayoutItem 都抓出來，
+        交給 layout_mg去處理與註冊
+        '''
+        if isinstance(container, dict):
+            for key, value in container.items():
+                if isinstance(value, LayoutItem):
+                    container[key] = self.lay_mg.add_item(value)
+                elif isinstance(value, dict):
+                    self._process_recursive_layout(value)
+        return container
 
     def _setup_menu(self):
         # MENU
@@ -79,8 +92,8 @@ class LayoutCollection:
                 PageTable.SINGLE_MENU,
                 LayoutName.SINGLE_MENU_MAIN,
                 Size(
-                    location_config.zoom_plus * (GameVariable.SINGLE_MENU_WIDTH_BLOCK * 2 - 1),
-                    location_config.zoom_plus * (GameVariable.SINGLE_MENU_HEIGHT_BLOCK * 2 - 1)
+                    location_config.zoom_plus * (GameVar.SINGLE_MENU_WIDTH_BLOCK * 2 - 1),
+                    location_config.zoom_plus * (GameVar.SINGLE_MENU_HEIGHT_BLOCK * 2 - 1)
                 ),
             )
         )
@@ -105,7 +118,7 @@ class LayoutCollection:
         )
 
     def _setup_single_game(self):
-        # SINGLE - Standard Items
+        # SINGLE
         self.single_bg = self.lay_mg.add_item(
             self._create_item(
                 PageTable.SINGLE,
@@ -118,12 +131,11 @@ class LayoutCollection:
             self._create_item(
                 PageTable.SINGLE,
                 LayoutNameManage.game_suffix_key(LayoutName.GAME_MAIN, 0),
-                Size(GameVariable.WIDTH_BLOCK * location_config.zoom,
-                     GameVariable.HEIGHT_BLOCK * location_config.zoom),
+                Size(GameVar.WIDTH_BLOCK * location_config.zoom,
+                     GameVar.HEIGHT_BLOCK * location_config.zoom),
             )
         )
 
-        # 假設 ZOOM_SIZE 是 32
         zoom_val = location_config.zoom
         zoom_x2  = location_config.zoom * 2
 
@@ -131,8 +143,8 @@ class LayoutCollection:
             item = self._create_item(
                 PageTable.SINGLE,
                 LayoutNameManage.game_suffix_key(LayoutName.GAME_SLOT, 0),
-                Size(GameVariable.CELL_BLOCK * zoom_val,
-                     GameVariable.CELL_BLOCK * zoom_val),
+                Size(GameVar.CELL_BLOCK * zoom_val,
+                     GameVar.CELL_BLOCK * zoom_val),
             ),
             target = self.single_main,
             gap_x = zoom_x2,
@@ -279,8 +291,8 @@ class LayoutCollection:
             self._create_item(
                 PageTable.DOUBLE,
                 LayoutNameManage.game_suffix_key(LayoutName.GAME_MAIN, 0),
-                Size(GameVariable.WIDTH_BLOCK * zoom_val,
-                     GameVariable.HEIGHT_BLOCK * zoom_val),
+                Size(GameVar.WIDTH_BLOCK * zoom_val,
+                     GameVar.HEIGHT_BLOCK * zoom_val),
                 Position(location_config.scale(282), location_config.scale(180))
             )
         )
@@ -288,8 +300,8 @@ class LayoutCollection:
             item = self._create_item(
                 PageTable.DOUBLE,
                 LayoutNameManage.game_suffix_key(LayoutName.GAME_SLOT, 0),
-                Size(GameVariable.CELL_BLOCK * zoom_val,
-                     GameVariable.CELL_BLOCK * zoom_val),
+                Size(GameVar.CELL_BLOCK * zoom_val,
+                     GameVar.CELL_BLOCK * zoom_val),
             ),
             target = self.double_1_main,
             gap_x = zoom_x2,
@@ -348,15 +360,15 @@ class LayoutCollection:
         )
 
         # DOUBLE - Player 2
-        p2_slot_size = Size(GameVariable.CELL_BLOCK * zoom_val,
-                            GameVariable.CELL_BLOCK * zoom_val)
+        p2_slot_size = Size(GameVar.CELL_BLOCK * zoom_val,
+                            GameVar.CELL_BLOCK * zoom_val)
 
         self.double_2_main = self.lay_mg.add_symmetric(
             item = self._create_item(
                 PageTable.DOUBLE,
                 LayoutNameManage.game_suffix_key(LayoutName.GAME_MAIN, 1),
-                Size(GameVariable.WIDTH_BLOCK * zoom_val,
-                     GameVariable.HEIGHT_BLOCK * zoom_val),
+                Size(GameVar.WIDTH_BLOCK * zoom_val,
+                     GameVar.HEIGHT_BLOCK * zoom_val),
             ),
             target = self.double_1_main,
             axis = 'vertical',
@@ -444,8 +456,8 @@ class LayoutCollection:
             self._create_item(
                 PageTable.ENDLESS,
                 LayoutNameManage.game_suffix_key(LayoutName.GAME_MAIN, 0),
-                Size(GameVariable.WIDTH_BLOCK * zoom_val,
-                     GameVariable.HEIGHT_BLOCK * zoom_val),
+                Size(GameVar.WIDTH_BLOCK * zoom_val,
+                     GameVar.HEIGHT_BLOCK * zoom_val),
                 Position(location_config.scale(282), location_config.scale(154))
             )
         )
@@ -453,8 +465,8 @@ class LayoutCollection:
             item = self._create_item(
                 PageTable.ENDLESS,
                 LayoutNameManage.game_suffix_key(LayoutName.GAME_SLOT, 0),
-                Size(GameVariable.CELL_BLOCK * zoom_val,
-                     GameVariable.CELL_BLOCK * zoom_val),
+                Size(GameVar.CELL_BLOCK * zoom_val,
+                     GameVar.CELL_BLOCK * zoom_val),
             ),
             target = self.endless_main,
             gap_x = zoom_x2,
@@ -545,29 +557,29 @@ class LayoutCollection:
         )
 
     def _setup_song(self):
-        # SONG
+        # SYS_CONFIG
         self.song_bg = self.lay_mg.add_item(
             self._create_item(
-                PageTable.SONG,
-                LayoutName.SONG_BG,
+                PageTable.SYS_CONFIG,
+                LayoutName.SYS_CONFIG_BG,
                 Size(ScreenConfig.width, ScreenConfig.height),
                 Position(0, 0),
             )
         )
         self.song_main = self.lay_mg.add_item(
             self._create_item(
-                PageTable.SONG,
-                LayoutName.SONG_MAIN,
+                PageTable.SYS_CONFIG,
+                LayoutName.SYS_SONG_MAIN,
                 layout_config.song_main_size,
                 Position(location_config.scale(660), location_config.scale(540))
             )
         )
         self.song_name = self.lay_mg.add_right_of(
             item = self._create_item(
-                PageTable.SONG,
-                LayoutName.SONG_NAME,
-                Size(SongVariable.WIDTH_BLOCK * location_config.zoom,
-                     SongVariable.HEIGHT_BLOCK * location_config.zoom),
+                PageTable.SYS_CONFIG,
+                LayoutName.SYS_SONG_NAME,
+                Size(ConfigSongVar.WIDTH_BLOCK * location_config.zoom,
+                     ConfigSongVar.HEIGHT_BLOCK * location_config.zoom),
             ),
             target = self.song_main,
             gap_x = location_config.zoom,
@@ -575,19 +587,29 @@ class LayoutCollection:
         )
         self.song_block = self.lay_mg.add_below(
             item = self._create_item(
-                PageTable.SONG,
-                LayoutName.SONG_BLOCK,
-                Size(SongVariable.WIDTH_BLOCK * location_config.zoom,
-                     SongVariable.HEIGHT_BLOCK * location_config.zoom),
+                PageTable.SYS_CONFIG,
+                LayoutName.SYS_SONG_BLOCK,
+                Size(ConfigSongVar.WIDTH_BLOCK * location_config.zoom,
+                     ConfigSongVar.HEIGHT_BLOCK * location_config.zoom),
             ),
             target = self.song_name,
-            gap = location_config.zoom,
+            gap = location_config.scale(40),
+            align = 'left'
+        )
+        self.lay_mg.add_below(
+            item = self._create_item(
+                PageTable.SYS_CONFIG,
+                LayoutName.SYS_WINDOW_SCALE,
+                layout_config.window_scale_size
+            ),
+            target = self.song_block,
+            gap = location_config.scale(12),
             align = 'left'
         )
         self.song_rect = self.lay_mg.add_inner(
             item = self._create_item(
-                PageTable.SONG,
-                LayoutName.SONG_RECT,
+                PageTable.SYS_CONFIG,
+                LayoutName.SYS_SONG_RECT,
                 Size(self.song_main.size.width * 0.9, location_config.y_gap),
             ),
             target = self.song_main,
@@ -619,14 +641,6 @@ class LayoutCollection:
             )
             if i == 0:
                 self.help_panel = added_item
-        # self.help_panel = self.lay_mg.add_center(
-        #     item = self._create_item(
-        #         PageTable.HELP,
-        #         LayoutName.HELP_PANEL,
-        #         Size(panel_w, panel_h),
-        #     ),
-        #     gap_y = location_config.scale(-648)
-        # )
         self.help_lace = self.lay_mg.add_center(
             item = self._create_item(
                 PageTable.HELP,

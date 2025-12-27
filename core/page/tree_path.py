@@ -1,3 +1,4 @@
+from core.debug import dbg
 from core.variable import PageTable
 
 
@@ -35,7 +36,7 @@ tree_path_table = {
 
     PageTable.DOUBLE:  PageTree(PageTable.DOUBLE),
     PageTable.ENDLESS: PageTree(PageTable.ENDLESS),
-    PageTable.SONG:    PageTree(PageTable.SONG),
+    PageTable.SYS_CONFIG:    PageTree(PageTable.SYS_CONFIG),
     PageTable.HELP:    PageTree(PageTable.HELP),
     PageTable.RANK:    PageTree(PageTable.RANK),
     PageTable.EXIT:    PageTree(PageTable.EXIT),
@@ -51,7 +52,7 @@ tree_path_table = {
 tree_path_table[PageTable.MENU].add_child(tree_path_table[PageTable.SINGLE_MENU])
 tree_path_table[PageTable.MENU].add_child(tree_path_table[PageTable.DOUBLE])
 tree_path_table[PageTable.MENU].add_child(tree_path_table[PageTable.ENDLESS])
-tree_path_table[PageTable.MENU].add_child(tree_path_table[PageTable.SONG])
+tree_path_table[PageTable.MENU].add_child(tree_path_table[PageTable.SYS_CONFIG])
 tree_path_table[PageTable.MENU].add_child(tree_path_table[PageTable.HELP])
 tree_path_table[PageTable.MENU].add_child(tree_path_table[PageTable.RANK])
 tree_path_table[PageTable.MENU].add_child(tree_path_table[PageTable.EXIT])

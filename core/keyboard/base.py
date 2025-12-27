@@ -1,4 +1,6 @@
 import pygame
+from core.debug import dbg
+from core.keyboard.variable import MaxLimits
 from core.variable import PageTable
 
 
@@ -39,50 +41,143 @@ class KeyboardGame(KeyboardBase):
     def move_crtl_left(self):
         self.player.store_action()
 
-# MENU / SINGLE_MENU / SONG / HELP
+# MENU / SINGLE_MENU / SYS_CONFIG / HELP
 class KeyboardList(KeyboardBase):
-    def __init__(self, manager, min_x, max_x, min_y, max_y) -> None:
+    def __init__(
+            self,
+            manager,
+            min_x,
+            max_x,
+            min_y,
+            max_y,
+            name_map: dict[int, str] | None = None
+        ) -> None:
+
         super().__init__(manager)
+
         self.min_x = min_x
         self.max_x = max_x
         self.min_y = min_y
         self.max_y = max_y
+        self.name_map = name_map
+
+    def _resolve_limit(self, limit_obj, check_axis_val: int) -> int:
+        """
+        通用解析函式：
+        limit_obj: 可能是 int (固定值) 或 dict (動態值)
+        check_axis_val: 參考軸的數值 (例如要查 max_x，通常是依據目前的 hook_y)
+        """
+        # 如果是純數字，直接回傳(用於沒有傳入dict而是只有單層list的)
+        if isinstance(limit_obj, int):
+            return limit_obj
+
+        # 如果是字典，開始查找
+        if isinstance(limit_obj, dict):
+            # 優先嘗試用「名稱」查找
+            if self.name_map:
+                key_name = self.name_map.get(check_axis_val) # int -> str
+                if key_name in limit_obj:
+                    return limit_obj[key_name]
+
+            # 其次嘗試用「索引」查找
+            if check_axis_val in limit_obj:
+                dbg.error(f"名稱{limit_obj}輸入錯誤")
+                return limit_obj[check_axis_val]
+
+        dbg.error(f"名稱{limit_obj}與索引{check_axis_val}輸入錯誤")
+        return 0
 
     def move_up(self):
+        # Y 軸移動限制通常依賴 X 軸 (每行的直列長度可能不同)
+        # 這裡依據 hook_x 來決定 Y 的範圍
+        cur_min_y = self._resolve_limit(self.min_y, self.mg.hook_x)
+        cur_max_y = self._resolve_limit(self.max_y, self.mg.hook_x)
+
         self.mg.local_renew(
             renew_y = -1,
-            min_x = self.min_x,
-            max_x = self.max_x,
-            min_y = self.min_y,
-            max_y = self.max_y
+            # 移動 Y 時，暫時不需要檢查 X 範圍 (或填 0)
+            min_x = 0, max_x = 0,
+            min_y = cur_min_y,
+            max_y = cur_max_y
         )
 
     def move_down(self):
+        cur_min_y = self._resolve_limit(self.min_y, self.mg.hook_x)
+        cur_max_y = self._resolve_limit(self.max_y, self.mg.hook_x)
+
         self.mg.local_renew(
             renew_y = 1,
-            min_x = self.min_x,
-            max_x = self.max_x,
-            min_y = self.min_y,
-            max_y = self.max_y
+            min_x = 0, max_x = 0,
+            min_y = cur_min_y,
+            max_y = cur_max_y
         )
 
     def move_left(self):
+        # X 軸移動限制依賴 Y 軸 (每一行的長度不同)
+        cur_min_x = self._resolve_limit(self.min_x, self.mg.hook_y)
+        cur_max_x = self._resolve_limit(self.max_x, self.mg.hook_y)
+
+        # 為了保持 Y 軸不變，這裡的 Y 範圍也要查一次 (確保 local_renew 邊界正確)
+        cur_min_y = self._resolve_limit(self.min_y, self.mg.hook_x)
+        cur_max_y = self._resolve_limit(self.max_y, self.mg.hook_x)
+
         self.mg.local_renew(
             renew_x = -1,
-            min_x = self.min_x,
-            max_x = self.max_x,
-            min_y = self.min_y,
-            max_y = self.max_y
+            min_x = cur_min_x,
+            max_x = cur_max_x,
+            min_y = cur_min_y,
+            max_y = cur_max_y
         )
 
     def move_right(self):
+        cur_min_x = self._resolve_limit(self.min_x, self.mg.hook_y)
+        cur_max_x = self._resolve_limit(self.max_x, self.mg.hook_y)
+        cur_min_y = self._resolve_limit(self.min_y, self.mg.hook_x)
+        cur_max_y = self._resolve_limit(self.max_y, self.mg.hook_x)
+
         self.mg.local_renew(
             renew_x = 1,
-            min_x = self.min_x,
-            max_x = self.max_x,
-            min_y = self.min_y,
-            max_y = self.max_y
+            min_x = cur_min_x,
+            max_x = cur_max_x,
+            min_y = cur_min_y,
+            max_y = cur_max_y
         )
+
+    # def move_up(self):
+    #     self.mg.local_renew(
+    #         renew_y = -1,
+    #         min_x = self.min_x,
+    #         max_x = self.max_x,
+    #         min_y = self.min_y,
+    #         max_y = self.max_y
+    #     )
+
+    # def move_down(self):
+    #     self.mg.local_renew(
+    #         renew_y = 1,
+    #         min_x = self.min_x,
+    #         max_x = self.max_x,
+    #         min_y = self.min_y,
+    #         max_y = self.max_y
+    #     )
+
+    # def move_left(self):
+    #     self.mg.local_renew(
+    #         renew_x = -1,
+    #         min_x = self.min_x,
+    #         max_x = self.max_x,
+    #         min_y = self.min_y,
+    #         max_y = self.max_y
+    #     )
+
+    # def move_right(self):
+    #     self.mg.local_renew(
+    #         renew_x = 1,
+    #         min_x = self.min_x,
+    #         max_x = self.max_x,
+    #         min_y = self.min_y,
+    #         max_y = self.max_y
+    #     )
 
 
 
@@ -94,7 +189,7 @@ class KeyboardManager:
         self.back_enable        = False
         self.current_keyboard   = None
 
-    def setup(self, current_keyboard, player1, player2):
+    def setup(self, song_mg, current_keyboard, player1, player2):
         self.current_keyboard   = current_keyboard
 
         menu = KeyboardList(
@@ -116,10 +211,18 @@ class KeyboardManager:
         song = KeyboardList(
             self,
             min_x = 0,
-            max_x = 10,
+            max_x = MaxLimits.SYS_SONG, # 傳入字典
             min_y = 0,
-            max_y = 1
+            max_y = 2,
+            name_map = song_mg.key_map # song_mg 的映射表
         )
+        # song = KeyboardList(
+        #     self,
+        #     min_x = 0,
+        #     max_x = 10,
+        #     min_y = 0,
+        #     max_y = 2
+        # )
         help = KeyboardList(
             self,
             min_x = 0,
@@ -187,7 +290,7 @@ class KeyboardManager:
                 pygame.K_LCTRL:     player1_keyboard.move_crtl_left,
                 pygame.K_BACKSPACE: player1_keyboard.move_backspace,
             },
-            PageTable.SONG: {
+            PageTable.SYS_CONFIG: {
                 pygame.K_UP:        song.move_up,
                 pygame.K_DOWN:      song.move_down,
                 pygame.K_LEFT:      song.move_left,
@@ -207,14 +310,17 @@ class KeyboardManager:
         }
 
     def local_renew(self, renew_x = 0, renew_y = 0, min_x = 0, max_x = 0, min_y = 0, max_y = 0):
-        self.hook_x += renew_x
-        self.hook_y += renew_y
-        if self.hook_x < min_x: self.hook_x = max_x
-        if self.hook_x > max_x: self.hook_x = min_x
-        if self.hook_y < min_y: self.hook_y = max_y
-        if self.hook_y > max_y: self.hook_y = min_y
+        if renew_x != 0:
+            self.hook_x += renew_x
+            if self.hook_x < min_x: self.hook_x = max_x
+            if self.hook_x > max_x: self.hook_x = min_x
 
-    def local_clear(self):
+        elif renew_y != 0:
+            self.hook_y += renew_y
+            if self.hook_y < min_y: self.hook_y = max_y
+            if self.hook_y > max_y: self.hook_y = min_y
+
+    def clear_local(self):
         self.hook_x = 0
         self.hook_y = 0
 

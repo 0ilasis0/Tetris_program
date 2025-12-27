@@ -1,4 +1,3 @@
-from core.debug import dbg
 from core.tetris_game.manager import TetrisCore
 
 

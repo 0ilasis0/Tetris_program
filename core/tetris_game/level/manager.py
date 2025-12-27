@@ -1,6 +1,6 @@
 from core.debug import dbg
 from core.tetris_game.level.variable import LevelParameter
-from core.tetris_game.variable import GameVariable
+from core.tetris_game.variable import GameVar
 
 
 class LevelManager:
@@ -26,7 +26,7 @@ class LevelManager:
         elif level is not None:
             new_level = min(level, self.max_level)
         else:
-            dbg.log('score and level is None')
+            dbg.error('score and level is None')
             return
 
         if new_level > self.current_level or level is not None:
@@ -46,5 +46,5 @@ class LevelManager:
         return self.current_difficult["raise_interval"]
 
     def reset(self, player):
-        player.drop_clock = GameVariable.DROP_CLOCK
+        player.drop_clock = GameVar.DROP_CLOCK
         self.current_level = -1

@@ -41,7 +41,7 @@ figures = {
 
 
 
-class BaseVariable:
+class BaseVar:
     NUMBER_MAX = 1000
 
 class GameState(Enum):
@@ -49,7 +49,7 @@ class GameState(Enum):
     STATE_KO          = 'ko'
     STATE_GAMEOVER    = 'gameover'
 
-class GameVariable:
+class GameVar:
     # SIZE AND BOLCK
     WIDTH_BLOCK     = 10
     HEIGHT_BLOCK    = 20
@@ -64,7 +64,7 @@ class GameVariable:
     # GAME
     MAX_KO_COUNT    = 3
     MAX_COMBO       = 20
-    MAX_SCORE       = BaseVariable.NUMBER_MAX
+    MAX_SCORE       = BaseVar.NUMBER_MAX
 
     # SYS_BASE
     DROP_CLOCK  = 500
@@ -75,7 +75,7 @@ class GameVariable:
     SINGLE_MENU_HEIGHT_BLOCK    = 2
 
 
-class RankVariable:
+class RankVar:
     RANK_TOTAL = 3
     DATA_TOTAL = 4
 
